@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+=begin
+    
+  Import KM events from the raw dumps.
+
+=end
+
+require 'rubygems'
+require 'km/db'
+
+if KM::DB::Event.connection.class.to_s =~ /(mysql|pgsql)/
+  parser_class = KM::DB::ParallelParser
+else
+  parser_class = KM::DB::Parser
+end
+
+parser = parser_class.new(:use_restart => true, :verbose => false)
+
+# import events by category
+parser.add_filter { |text, event|
+  if event['_p2']
+    KM::DB::User.alias! event['_p'], event['_p2']
+  elsif event['_n']
+    KM::DB::Event.record event
+  else
+    KM::DB::Property.set event
+  end
+  
+  event
+}
+
+parser.run(ARGV)                 # heavy lifting here
+KM::DB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
+KM::DB::User.resolve_alias_chains!   # detect and filter alias chains
+KM::DB::Key.fix_duplicates!          # remove key duplicates
