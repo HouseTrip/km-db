@@ -16,8 +16,8 @@ require 'km/db/migration'
 module KM::DB
   class CustomRecord < ActiveRecord::Base
     DefaultConfig = {
-      :adapter  => 'sqlite3',
-      :database => "test.db"
+      'adapter'  => 'sqlite3',
+      'database' => "test.db"
     }
 
     def self.disable_index
@@ -39,10 +39,9 @@ module KM::DB
     def self.connect_to_km_db!
       config = DefaultConfig.dup
       ['km_db.yml', 'config/km_db.yml'].each do |config_path|
-        if File.exist?(config_path)
-          config.merge! YAML.load(ERB.new(File.open().read).result)
-          break
-        end
+        next unless File.exist?(config_path)
+        config.merge! YAML.load(ERB.new(File.open(config_path).read).result)
+        break
       end
       establish_connection(config)
 
