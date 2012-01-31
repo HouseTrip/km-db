@@ -10,6 +10,8 @@ module KM::DB
     end
     
     attr :use_restart
+    attr :verbose
+    attr :abort_on_error
 
     def initialize(options = {})
       @processed_bytes = nil
@@ -19,6 +21,7 @@ module KM::DB
       @filters = []
       @verbose = options.delete(:verbose)
       @use_restart = options.delete(:use_restart)
+      @abort_on_error = options.delete(:abort_on_error)
 
       if @use_restart && @verbose && Dumpfile.count > 0
         log "Using restart information"
@@ -66,16 +69,21 @@ module KM::DB
 
       # filter strange utf-8 encoding/escaping found in KM dumps   
       if text =~ /\\303\\[0-9]{3}/
-        preparsed_text = eval("%Q(#{text})") 
+        begin
+          preparsed_text = eval("%Q(#{text})") 
+        rescue SyntaxError => e
+          log "Syntax error in: #{text}"
+          raise e if @abort_on_error
+        end
       else
         preparsed_text = text
       end
 
       begin
         data = JSON.parse(text)
-      rescue JSON::ParserError  
-        puts "Warning, JSON parse error in: #{text}"
-        return
+      rescue JSON::ParserError => e
+        log "Warning, JSON parse error in: #{text}"
+        raise e if @abort_on_error
       end
 
       @filters.each do |filter|
@@ -85,7 +93,7 @@ module KM::DB
 
     def process_events_in_file(input)
       @progress.title = input.basename.to_s
-      dumpfile = Dumpfile.get(input) if @use_restart
+      dumpfile = Dumpfile.get(input, @use_restart) if @use_restart
       line_number = 0
       input.each_line do |event|
         @processed_bytes += event.size

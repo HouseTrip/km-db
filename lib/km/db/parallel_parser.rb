@@ -54,7 +54,7 @@ module KM::DB
 
     def process_events_in_file(input)
       processed_bytes = 0
-      dumpfile = Dumpfile.get(input)
+      dumpfile = Dumpfile.get(input, @use_restart)
       line_number = 0
       @pipe_wr.write "FILE #{input.basename}\n"
       input.each_line do |event|

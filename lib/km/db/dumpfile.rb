@@ -15,8 +15,9 @@ module KM::DB
       attributes['last_line'] || 0
     end
 
-    def self.get(path)
+    def self.get(path, job = nil)
       basename = File.basename(path)
+      basename += " @#{job.to_s}" if job
       find_or_create(:basename => basename)
     end
   end
