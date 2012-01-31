@@ -37,12 +37,13 @@ module KM::DB
     end
 
     def self.connect_to_km_db!
-      config_path = 'config/km_db.yml'
       config = DefaultConfig.dup
-      if File.exist?(config_path)
-        config.merge! YAML.load(ERB.new(File.open().read).result)
+      ['km_db.yml', 'config/km_db.yml'].each do |config_path|
+        if File.exist?(config_path)
+          config.merge! YAML.load(ERB.new(File.open().read).result)
+          break
+        end
       end
-      
       establish_connection(config)
 
       unless connection.table_exists?('events')

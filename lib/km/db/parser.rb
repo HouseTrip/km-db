@@ -17,7 +17,7 @@ module KM::DB
       @exclude_regexps = []
       @include_regexps = []
       @filters = []
-      @verbose = true
+      @verbose = options.delete(:verbose)
       @use_restart = options.delete(:use_restart)
 
       if @use_restart && @verbose && Dumpfile.count > 0
@@ -57,8 +57,7 @@ module KM::DB
   private
 
     def log(message)
-      return unless @verbose
-      $stderr.write(message + "\n")
+      $stderr.write(message + "\n") if @verbose
     end
 
     def process_event(text)

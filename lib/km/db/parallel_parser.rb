@@ -20,11 +20,11 @@ module KM::DB
       Process.fork do
         @pipe_rd.close
         Parallel.each(inputs, :in_processes => @worker_count) do |input|
-          KM::Event.connection.reconnect!
-          # log "Worker #{Process.pid} starting #{input}"
+          KM::DB::Event.connection.reconnect!
+          log "Worker #{Process.pid} starting #{input}"
           $0 = "worker: #{input}"
           process_events_in_file(input)
-          # log "Worker #{Process.pid} done"
+          log "Worker #{Process.pid} done"
           true
         end
       end
