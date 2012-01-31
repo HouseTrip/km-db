@@ -1,12 +1,3 @@
-=begin
-
-  belongs_to_user --
-
-  Trait shared by KM::Event and KM::Property.
-
-=end
-
-
 module KM::DB::BelongsToUser
   def self.included(mod)
     mod.class_eval do

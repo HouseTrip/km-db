@@ -7,47 +7,48 @@
 
 =end
 
-
 require 'active_record'
 require 'erb'
 require 'yaml'
+require 'km/db/migration'
 
-class KM::DB::CustomRecord < ActiveRecord::Base
-  # Connect to an alternate database when the class is loaded
-  connect_to_km_db!
 
-  DefaultConfig = {
-    :adapter  => 'mysql2',
-    :database => "km_events",
-    :username => "root",
-    :encoding => "utf8"
-  }
-
-  def self.disable_index
-    connection.execute %Q{
-      ALTER TABLE `#{table_name}` DISABLE KEYS;
+module KM::DB
+  class CustomRecord < ActiveRecord::Base
+    DefaultConfig = {
+      :adapter  => 'sqlite3',
+      :database => "test.db"
     }
-  end
 
-  def self.enable_index
-    connection.execute %Q{
-      ALTER TABLE `#{table_name}` ENABLE KEYS;
-    }
-  end
+    def self.disable_index
+      connection.execute %Q{
+        ALTER TABLE `#{table_name}` DISABLE KEYS;
+      }
+    end
 
-  def self.find_or_create(options)
-    find(:first, :conditions => options) || create(options)
-  end
+    def self.enable_index
+      connection.execute %Q{
+        ALTER TABLE `#{table_name}` ENABLE KEYS;
+      }
+    end
 
-  def self.connect_to_km_db!
-    config = YAML.load(ERB.new(File.open('config/km_db.yml').read).result)
-    config.reverse_merge
-    establish_connection(DefaultConfig.merge(config))
+    def self.find_or_create(options)
+      find(:first, :conditions => options) || create(options)
+    end
 
-    unless connection.table_exists?('events')
-      SetupEventsDatabase.up
-      self.reset_column_information
+    def self.connect_to_km_db!
+      config_path = 'config/km_db.yml'
+      config = DefaultConfig.dup
+      if File.exist?(config_path)
+        config.merge! YAML.load(ERB.new(File.open().read).result)
+      end
+      
+      establish_connection(config)
+
+      unless connection.table_exists?('events')
+        SetupEventsDatabase.up
+        self.reset_column_information
+      end
     end
   end
 end
-
