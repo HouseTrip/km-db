@@ -28,6 +28,8 @@ module KM::DB
       }
       { :select => selects.join(', '), :joins => joins.join("\n") }
     }
+    named_scope :before, lambda { |date| { :conditions => ["`t` < ?", date] } }
+    named_scope :after,  lambda { |date| { :conditions => ["`t` > ?", date] } }
 
     named_scope :named, lambda { |name| { :conditions => { :n => name } } }
 
