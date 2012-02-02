@@ -14,7 +14,7 @@ else
   parser_class = KM::DB::Parser
 end
 
-parser = parser_class.new(:use_restart => true, :verbose => false)
+parser = parser_class.new(:use_restart => 'import', :verbose => false)
 
 # import events by category
 parser.add_filter { |text, event|
