@@ -1,3 +1,9 @@
+GIT
+  remote: git@github.com:HouseTrip/progressbar.git
+  revision: 20c990237eb47f762d7c294d3e05ac562e8423dd
+  specs:
+    progressbar (0.9.2)
+
 PATH
   remote: .
   specs:
@@ -39,6 +45,7 @@ DEPENDENCIES
   bundler (>= 1.0.0)
   json
   km-db!
+  progressbar!
   rake
   rspec (~> 2.4.0)
   sqlite3-ruby

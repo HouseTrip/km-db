@@ -49,7 +49,8 @@ module KM::DB
 
       @processed_bytes = 0
       @progress = ProgressBar.new("-" * 20, total_bytes)
-
+      @progress.long_running if @progress.respond_to?(:long_running)
+      
       inputs.sort.each do |input|
         process_events_in_file(input)
       end
