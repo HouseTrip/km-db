@@ -16,7 +16,7 @@ module KM::DB
         temp_name = "#{prop_table}_#{k}"
         selects << "`#{temp_name}`.`value` AS `#{prop.split.join('_')}`"
         joins << sanitize_sql_array([%Q{
-          INNER JOIN `properties` AS `#{temp_name}`
+          LEFT JOIN `properties` AS `#{temp_name}`
           ON `#{table_name}`.id = `#{temp_name}`.event_id 
           AND `#{temp_name}`.`key` = ?}, KM::DB::Key.get(prop)])
       }
