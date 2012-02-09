@@ -6,8 +6,9 @@ module KM::DB
 
     set_table_name "properties"
     belongs_to :event, :class_name => 'KM::DB::Event'
+
     default_scope :order => 't DESC'
-    named_scope :named, lambda { |name| { :conditions => { :key => name } } }
+    named_scope :named, lambda { |name| { :conditions => { :key => KM::DB::Key.get(name) } } }
 
     def self.set(hash, stamp=nil, user=nil, event=nil)
       user_name = hash.delete('_p')
