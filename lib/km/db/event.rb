@@ -30,10 +30,7 @@ module KM::DB
       key = Key.get hash.delete('_n')
 
       transaction do
-        connection.execute(sanitize_sql_array([%Q{
-          INSERT INTO `#{table_name}` (`t`,`n`,`user_id`) VALUES (?,?,?)
-        }, stamp,key,user.id]))
-
+        last = create(:t => stamp, :n => key, :user => user)
         Property.set(hash, stamp, user, last)
       end
     end
