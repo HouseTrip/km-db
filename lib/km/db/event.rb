@@ -1,27 +1,13 @@
 require 'km/db/custom_record'
 require 'km/db/belongs_to_user'
+require 'km/db/has_properties'
 
 module KM::DB
   class Event < CustomRecord
     include BelongsToUser
+    include HasProperties
 
     set_table_name "events"
-    has_many   :properties, :class_name => 'KM::DB::Property'
-
-    named_scope :with_properties, lambda { |*props|
-      prop_table = Property.table_name
-      selects = ["`#{table_name}`.*"]
-      joins = []
-      props.each_with_index { |prop,k|
-        temp_name = "#{prop_table}_#{k}"
-        selects << "`#{temp_name}`.`value` AS `#{prop.split.join('_')}`"
-        joins << sanitize_sql_array([%Q{
-          LEFT JOIN `properties` AS `#{temp_name}`
-          ON `#{table_name}`.id = `#{temp_name}`.event_id 
-          AND `#{temp_name}`.`key` = ?}, KM::DB::Key.get(prop)])
-      }
-      { :select => selects.join(', '), :joins => joins.join("\n") }
-    }
     named_scope :before, lambda { |date| { :conditions => ["`t` < ?", date] } }
     named_scope :after,  lambda { |date| { :conditions => ["`t` > ?", date] } }
 

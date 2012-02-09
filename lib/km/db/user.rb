@@ -1,7 +1,11 @@
+require 'km/db/has_properties'
+
 module KM::DB
   class User < CustomRecord
+    include HasProperties
+
     set_table_name "users"
-    has_many :properties, :class_name => 'KM::DB::Property'
+
     has_many :events,     :class_name => 'KM::DB::Event'
     belongs_to :alias,    :class_name => 'KM::DB::User' 
       # points to the aliased user. if set, no properties/events should belong to this user
