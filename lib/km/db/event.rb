@@ -21,6 +21,10 @@ module KM::DB
       properties.named(name).first.andand.value
     end
 
+    def name
+      KM::DB::Key.find(n).value
+    end
+
     def self.record(hash)
       user_name = hash.delete('_p')
       user ||= User.get(user_name)
