@@ -8,12 +8,13 @@ module KM::DB
     include HasProperties
 
     set_table_name "events"
-    named_scope :before, lambda { |date| { :conditions => ["`t` < ?", date] } }
-    named_scope :after,  lambda { |date| { :conditions => ["`t` > ?", date] } }
+
+    named_scope :before, lambda { |date| { :conditions => ["`#{table_name}`.`t` < ?", date] } }
+    named_scope :after,  lambda { |date| { :conditions => ["`#{table_name}`.`t` > ?", date] } }
 
     named_scope :named, lambda { |name| { :conditions => { :n => KM::DB::Key.get(name) } } }
 
-    named_scope :by_date, :order => '`t` ASC'
+    named_scope :by_date, lambda { { :order => "`#{table_name}`.`t` ASC" } }
 
     # return value of property
     def prop(name)
