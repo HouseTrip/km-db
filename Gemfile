@@ -1,6 +1,6 @@
 source :gemcutter
 
-gem 'progressbar', :git => 'git@github.com:HouseTrip/progressbar.git'
+gem 'progressbar'
 
 # Specify your gem's dependencies in km.gemspec
 gemspec
