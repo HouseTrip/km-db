@@ -69,15 +69,13 @@ module KM::DB
       return unless @include_regexps.all? { |re| text =~ re }
 
       # filter strange utf-8 encoding/escaping found in KM dumps   
-      if text =~ /\\303\\[0-9]{3}/
+      if text =~ /\\30[3-5]\\[0-9]{3}/
         begin
-          preparsed_text = eval("%Q(#{text})") 
+          text = eval("%Q(#{text})") 
         rescue SyntaxError => e
           log "Syntax error in: #{text}"
           raise e if @abort_on_error
         end
-      else
-        preparsed_text = text
       end
 
       begin
@@ -85,6 +83,12 @@ module KM::DB
       rescue JSON::ParserError => e
         log "Warning, JSON parse error in: #{text}"
         raise e if @abort_on_error
+        return
+      end
+
+      if data.nil?
+        log "Warning, JSON parse failed in: #{text}"
+        return
       end
 
       @filters.each do |filter|
