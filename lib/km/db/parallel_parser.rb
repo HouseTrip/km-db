@@ -6,7 +6,7 @@ module KM::DB
     
     def initialize(options = {})
       super(options)
-      @worker_count = Parallel.processor_count
+      @worker_count = options.delete(:workers) || Parallel.processor_count
     end
 
     def run(argv)
@@ -16,7 +16,7 @@ module KM::DB
       total_bytes = total_size_of_files(inputs)
 
       # Start workers
-        log "Using #{@worker_count} workers."
+      log "Using #{@worker_count} workers."
       Process.fork do
         @pipe_rd.close
         Parallel.each(inputs, :in_processes => @worker_count) do |input|
