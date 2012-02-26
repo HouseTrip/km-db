@@ -48,10 +48,11 @@ module KM::DB
       add_index :users, [:name]
 
       create_table :dumpfiles do |t|
-        t.string  :basename
-        t.integer :last_line
+        t.string  :path
+        t.string  :job
+        t.integer :offset
       end
-      add_index :dumpfiles, [:basename]
+      add_index :dumpfiles, [:path]
 
     end
 

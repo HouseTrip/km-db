@@ -9,7 +9,7 @@ module KM::DB
       attr_writer :title
     end
     
-    attr :use_restart
+    attr :resume_job
     attr :verbose
     attr :abort_on_error
 
@@ -19,11 +19,11 @@ module KM::DB
       @exclude_regexps = []
       @include_regexps = []
       @filters = []
-      @verbose = options.delete(:verbose)
-      @use_restart = options.delete(:use_restart)
+      @verbose        = options.delete(:verbose)
+      @resume_job     = options.delete(:resume)
       @abort_on_error = options.delete(:abort_on_error)
 
-      if @use_restart && @verbose && Dumpfile.count > 0
+      if @resume_job && @verbose && Dumpfile.count > 0
         log "Using restart information"
       end
     end
@@ -92,18 +92,24 @@ module KM::DB
       end
     end
 
-    def process_events_in_file(input)
-      @progress.title = input.basename.to_s
-      dumpfile = Dumpfile.get(input, @use_restart) if @use_restart
-      line_number = 0
-      input.each_line do |event|
-        @processed_bytes += event.size
-        @progress.set @processed_bytes if line_number % 100 == 0
-        line_number += 1
+    def process_events_in_file(pathname)
+      pathname.open do |input|
+        @progress.title = pathname.basename.to_s
+        if @resume_job
+          dumpfile = Dumpfile.get(pathname, @resume_job)
+          log "Starting file #{pathname} from offset #{dumpfile.offset}"
+          input.seek(dumpfile.offset)
+        end
+        line_number = 0
+        while line = input.gets
+          @processed_bytes += line.size
+          @progress.set @processed_bytes if line_number % 100 == 0
+          line_number += 1
 
-        next if @use_restart && line_number <= dumpfile.last_line
-        process_event(event)
-        dumpfile.set(line_number) if @use_restart
+          process_event(line)
+          dumpfile.set(input.tell) if @resume_job
+          break if (@stop_after -= 1) <= 0
+        end
       end
     end
 

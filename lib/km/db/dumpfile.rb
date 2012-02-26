@@ -4,21 +4,20 @@ module KM::DB
   class Dumpfile < CustomRecord
     set_table_name "dumpfiles"
 
-    validates_presence_of :basename
-    validates_presence_of :last_line
+    validates_presence_of :offset
+    validates_presence_of :path
 
-    def set(lineno)
-      update_attributes!(:last_line => lineno)
+    def set(offset)
+      update_attributes!(:offset => offset)
     end
 
-    def last_line
-      attributes['last_line'] || 0
+    def offset
+      attributes['offset'] || 0
     end
 
-    def self.get(path, job = nil)
-      basename = File.basename(path)
-      basename += " @#{job.to_s}" if job
-      find_or_create(:basename => basename)
+    def self.get(pathname, job = nil)
+      job ||= 'nil'
+      find_or_create(:path => pathname.cleanpath.to_s, :job => job)
     end
   end
 end

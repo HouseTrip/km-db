@@ -14,7 +14,8 @@ else
   parser_class = KM::DB::Parser
 end
 
-parser = parser_class.new(:use_restart => 'import', :verbose => false)
+parser = parser_class.new(:resume  => 'import', 
+                          :verbose => true)
 
 # import events by category
 parser.add_filter { |text, event|
@@ -29,7 +30,7 @@ parser.add_filter { |text, event|
   event
 }
 
-parser.run(ARGV)                 # heavy lifting here
+parser.run(ARGV)                     # heavy lifting here
 KM::DB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
 KM::DB::User.resolve_alias_chains!   # detect and filter alias chains
 KM::DB::Key.fix_duplicates!          # remove key duplicates

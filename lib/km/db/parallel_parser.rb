@@ -52,26 +52,30 @@ module KM::DB
 
   private
 
-    def process_events_in_file(input)
-      processed_bytes = 0
-      dumpfile = Dumpfile.get(input, @use_restart)
-      line_number = 0
-      @pipe_wr.write "FILE #{input.basename}\n"
-      input.each_line do |event|
-        line_number += 1
-        processed_bytes += event.size
-
-        next if line_number <= dumpfile.last_line
-        process_event(event)
-        dumpfile.set(line_number)
-
-        if processed_bytes > 10_000
-          @pipe_wr.write "OK #{processed_bytes}\n"
-          processed_bytes = 0
+    def process_events_in_file(pathname)
+      pathname.open do |input|
+        processed_bytes = 0
+        if @resume_job
+          dumpfile = Dumpfile.get(pathname, @resume_job)
+          log "Starting file #{pathname} from offset #{dumpfile.offset}"
+          input.seek(dumpfile.offset)
         end
+        line_number = 0
+        @pipe_wr.write "FILE #{pathname.basename}\n"
+        while line = input.gets
+          line_number += 1
+          processed_bytes += line.size
 
+          process_event(line)
+          dumpfile.set(input.tell)
+
+          if processed_bytes > 100_000
+            @pipe_wr.write "OK #{processed_bytes}\n"
+            processed_bytes = 0
+          end
+        end
+        @pipe_wr.write "OK #{processed_bytes}\n"
       end
-      @pipe_wr.write "OK #{processed_bytes}\n"
     end
 
   end
