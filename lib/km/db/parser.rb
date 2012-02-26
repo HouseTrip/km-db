@@ -112,7 +112,6 @@ module KM::DB
 
           process_event(line)
           dumpfile.set(input.tell) if @resume_job
-          break if (@stop_after -= 1) <= 0
         end
       end
     end
