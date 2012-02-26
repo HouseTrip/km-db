@@ -32,11 +32,8 @@ module KM::DB
 
       stamp = Time.at hash.delete('_t')
       key = Key.get hash.delete('_n')
-
-      transaction do
-        last = create(:t => stamp, :n => key, :user => user)
-        Property.set(hash, stamp, user, last)
-      end
+      event = create(:t => stamp, :n => key, :user => user)
+      Property.set(hash, stamp, user, event)
     end
   end
 end

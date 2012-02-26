@@ -18,14 +18,15 @@ module KM::DB
       event_id = event ? event.id : nil
       stamp = Time.at hash.delete('_t') || stamp
 
-      transaction do
-        hash.each_pair do |prop_name,value|
-          key = Key.get(prop_name)
-          connection.execute(sanitize_sql_array([%Q{
-            INSERT INTO `#{table_name}` (`t`,`user_id`,`event_id`,`key`,`value`) VALUES (?,?,?,?,?)
-          }, stamp,user.id,event_id,key,value]))
-        end
+      sql_insert = "INSERT INTO `#{table_name}` (`t`,`user_id`,`event_id`,`key`,`value`) VALUES "
+      sql_values = []
+
+      hash.each_pair do |prop_name,value|
+        key = Key.get(prop_name)
+        sql_values << sanitize_sql_array(["(?,?,?,?,?)", stamp,user.id,event_id,key,value])
       end
+
+      connection.execute(sql_insert + sql_values.join(","))
     end
   end
 end

@@ -22,22 +22,18 @@ module KM::DB
 
     # mark this user as aliasing another
     def aliases!(other)
-      transaction do
-        [Property,Event].each do |model|
-          model.user_is(self).update_all({:user_id => other.id})
-        end
-        self.update_attributes!(:alias => other)
+      [Property,Event].each do |model|
+        model.user_is(self).update_all({:user_id => other.id})
       end
+      self.update_attributes!(:alias => other)
     end
 
     # return the user named `name` (creating it if necessary)
     # if `name` is an alias, return the original user
     def self.get(name)
-      transaction do
-        user = named(name).first || create(:name => name)
-        user = user.alias while user.alias
-        return user
-      end
+      user = named(name).first || create(:name => name)
+      user = user.alias while user.alias
+      return user
     end
 
 
