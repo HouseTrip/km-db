@@ -13,6 +13,13 @@ module KM::DB
     has_many :events,     :foreign_key => :n,   :class_name => 'KM::DB::Event',    :dependent => :delete_all
     has_many :properties, :foreign_key => :key, :class_name => 'KM::DB::Property', :dependent => :delete_all
 
+    named_scope :has_duplicate, lambda {
+      {
+        :select => "id, string, COUNT(id) AS quantity",
+        :group => :string, :having => "quantity > 1"
+      }
+    }
+
     def self.get(string)
       @cache ||= {}
       @cache[string] ||= get_uncached(string)
@@ -20,10 +27,8 @@ module KM::DB
 
     # Replace each duplicate key ID with its most-used variant
     def self.fix_duplicates!
-      find(:all, :group => :string).map(&:string).each do |string|
-        # find keys for this string
+      has_duplicate.map(&:string).each do |string|
         all_keys = find(:all, :conditions => { :string => string })
-        next unless all_keys.size > 1
 
         # sort keys by usage
         all_ids = all_keys.map { |key|
@@ -34,6 +39,7 @@ module KM::DB
           k.first
         }
         id_to_keep = all_ids.pop
+        $stderr.write "Fixing key '#{string}' #{all_ids.inspect} -> #{id_to_keep.inspect}\n"
         Event.update_all({ :n => id_to_keep }, ["`events`.`n` IN (?)", all_ids])
         Property.update_all({ :key => id_to_keep }, ["`properties`.`key` IN (?)", all_ids])
         Key.delete_all(["id IN (?)", all_ids])

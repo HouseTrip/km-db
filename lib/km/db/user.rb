@@ -15,6 +15,10 @@ module KM::DB
 
     named_scope :named, lambda { |name| { :conditions => { :name => name } } }
 
+    named_scope :duplicates, lambda {{
+      :select => "id, COUNT(id) AS quantity", :group => :name, :having => "quantity > 1"
+    }}
+
     # return (latest) value of property
     def prop(name)
       properties.named(name).first.andand.value
@@ -50,8 +54,23 @@ module KM::DB
       u2.aliases! u1
     end
 
+
+    # duplication can occur during parallel imports because we're not running transactionally.
+    def self.fix_duplicates!
+      duplicates.map(&:name).each do |name|
+        named(name).all.tap do |all_users|
+          kept_user = all_users.pop
+          all_users.each do |user|
+            user.aliases! kept_user
+            user.destroy
+          end
+        end
+      end
+    end
+
+
+    # detect alias chains
     def self.resolve_alias_chains!
-      # detect alias chains
       find(:all, :joins => :alias, :conditions => 'aliases_users.alias_id IS NOT NULL').each do |user|
         user = find(user.id)
         origin = find(user.alias_id)
@@ -59,7 +78,6 @@ module KM::DB
         $stderr.write "Aliasing #{user.name} -> #{origin.name}\n"
         user.aliases!(origin)
       end
-      nil
     end
   end
 end
