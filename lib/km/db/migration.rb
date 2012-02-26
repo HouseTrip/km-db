@@ -19,9 +19,7 @@ module KM::DB
         t.datetime :t
       end
       add_index :events, [:n]
-      add_index :events, [:id, :n]
       add_index :events, [:user_id]
-      add_index :events, [:user_id,:n]
 
 
       create_table :keys do |t|
@@ -37,8 +35,7 @@ module KM::DB
         t.datetime :t
       end
       add_index :properties, [:key]
-      add_index :properties, [:user_id,:key]
-      add_index :properties, [:event_id,:key]
+      add_index :properties, [:user_id]
       add_index :properties, [:event_id]
 
       create_table :users do |t|
