@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "json"
   s.add_development_dependency "sqlite3-ruby"
   
-  s.add_dependency "json"
+  s.add_dependency "yajl-ruby"
   s.add_dependency "progressbar"
   s.add_dependency "parallel"
   s.add_dependency "andand"

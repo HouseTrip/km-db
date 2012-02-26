@@ -1,4 +1,4 @@
-require 'json/ext'
+require 'yajl/json_gem'
 require 'pathname'
 require 'progressbar'
 require 'pstore'
