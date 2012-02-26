@@ -18,6 +18,7 @@ module KM::DB
       event_id = event ? event.id : nil
       stamp = Time.at hash.delete('_t') || stamp
 
+      return if hash.empty?
       sql_insert = "INSERT INTO `#{table_name}` (`t`,`user_id`,`event_id`,`key`,`value`) VALUES "
       sql_values = []
 
