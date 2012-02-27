@@ -18,6 +18,52 @@ Add this to your Gemfile if you're using Bundler:
     gem 'km-db', :git => 'git://github.com/HouseTrip/km-db.git'
 
 
+Importing data
+--------------
+
+Running reports on raw logs can be less effective than running against a (relational) database.
+`km-db` provides a `km_db_import` executable. Run it with:
+
+    $ bundle exec km_db_import <data-dump-directory>…
+
+By default, you events will be imported in `test.db`, a SQLite database.
+
+You can create `km_db.yml` or `config/km_db.yml` to have it import using another adapter, for instance:
+
+    ---- km_db.yml ----
+    adapter:  mysql2
+    database: km_events
+    user:     root
+
+
+Using imported data
+-------------------
+
+The `KM::DB` module exposes four `ActiveRecord` classes:
+`Event`, `Property`, `User` are the main domain objects.
+`Key` is used to intern strings (event and property names) for performance.
+
+### Finding events and properties
+
+All visits during Jan. 2012:
+
+    KM::DB::Event.before('2012-02-1').after('2012-01-01').named('visited site').by_date
+
+All of a user's visit:
+
+    KM::DB::User.last.events.named('visited site')
+
+A user's referers:
+    
+    KM::DB::User.last.properties.named('referer').map(&:value)
+
+Load some properties with events (uses a left join by default):
+
+    KM::DB::User.last.events.with_properties('a prop', 'another prop').map(&:another_prop)
+
+Note that many more complex queries will require building SQL queries directly.
+
+
 Processing data
 ---------------
 
@@ -40,22 +86,3 @@ The following example counts the number of *aliasing* events in all JSON files u
     puts counter
 
 Note that it will not work with `ParallelParser`, as the `counter` variable will be different for each process.
-
-
-
-Importing data
---------------
-
-`km-db` provides a `km_db_import` executable. Run it with:
-
-    `$ bundle exec km_db_import <data-dump-directory>…`
-
-By default, you events will be imported in `test.db`, a SQLite database.
-
-You can create `km_db.yml` or `config/km_db.yml` to have it import using another adapter, for instance:
-
-    ---- km_db.yml ----
-    adapter:  mysql2
-    database: km_events
-    user:     root
-
