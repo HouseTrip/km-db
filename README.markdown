@@ -1,14 +1,15 @@
 The `km-db` gem should be useful to KissMetrics (KM) users.
-Its main aim is to efficiently process data obtained with KM's "Data Export" feature.
+Its aim is to efficiently process data obtained with KM's "Data Export" feature.
 
 It is meant to :
 
+* import KM event dumps into a SQL database (preferably MySQL / PostgreSQL)
 * quickly process KM event dumps
-* import KM dumps into a SQL database (preferably MySQL / PostgreSQL)
 
-Once imported, you can run complex queries against you visit history, for instance run multivariate analysis.
+Once imported, you can run complex queries against your visit history, for instance run multivariate analysis.
 
 Beware though, KM data can be huge, and processing it is taxing !
+
 
 Installing
 ----------
@@ -34,6 +35,8 @@ You can create `km_db.yml` or `config/km_db.yml` to have it import using another
     adapter:  mysql2
     database: km_events
     user:     root
+
+Remember to add `sqlite3-ruby` or `mysql2` to your Gemfile.
 
 
 Using imported data
