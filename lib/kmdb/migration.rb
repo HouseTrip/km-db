@@ -6,7 +6,7 @@
 
 require 'active_record'
 
-module KM::DB
+module KMDB
   class SetupEventsDatabase < ActiveRecord::Migration
     def self.connection
       CustomRecord.connection

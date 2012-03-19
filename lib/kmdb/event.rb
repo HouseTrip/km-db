@@ -1,8 +1,8 @@
-require 'km/db/custom_record'
-require 'km/db/belongs_to_user'
-require 'km/db/has_properties'
+require 'kmdb/custom_record'
+require 'kmdb/belongs_to_user'
+require 'kmdb/has_properties'
 
-module KM::DB
+module KMDB
   class Event < CustomRecord
     include BelongsToUser
     include HasProperties
@@ -12,7 +12,7 @@ module KM::DB
     named_scope :before, lambda { |date| { :conditions => ["`#{table_name}`.`t` < ?", date] } }
     named_scope :after,  lambda { |date| { :conditions => ["`#{table_name}`.`t` > ?", date] } }
 
-    named_scope :named, lambda { |name| { :conditions => { :n => KM::DB::Key.get(name) } } }
+    named_scope :named, lambda { |name| { :conditions => { :n => KMDB::Key.get(name) } } }
 
     named_scope :by_date, lambda { { :order => "`#{table_name}`.`t` ASC" } }
 
@@ -22,7 +22,7 @@ module KM::DB
     end
 
     def name
-      KM::DB::Key.find(n).value
+      KMDB::Key.find(n).value
     end
 
     def self.record(hash)

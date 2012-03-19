@@ -10,10 +10,10 @@
 require 'active_record'
 require 'erb'
 require 'yaml'
-require 'km/db/migration'
+require 'kmdb/migration'
 
 
-module KM::DB
+module KMDB
   class CustomRecord < ActiveRecord::Base
     DefaultConfig = {
       'adapter'  => 'sqlite3',

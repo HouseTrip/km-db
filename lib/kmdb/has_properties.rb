@@ -1,16 +1,16 @@
 =begin
 
-  KM::DB::HasProperties --
+  KMDB::HasProperties --
 
   Trait shared by Event and User.
 
 =end
 
-module KM::DB
+module KMDB
   module HasProperties
     def self.included(mod)
       mod.class_eval do
-        has_many   :properties, :class_name => 'KM::DB::Property'
+        has_many   :properties, :class_name => 'KMDB::Property'
 
         named_scope :with_properties, lambda { |*props|
           direction = props.delete(:exclude_missing) ? 'INNER' : 'LEFT'
@@ -23,7 +23,7 @@ module KM::DB
             joins << sanitize_sql_array([%Q{
               #{direction} JOIN `properties` AS `#{temp_name}`
               ON `#{table_name}`.id = `#{temp_name}`.event_id 
-              AND `#{temp_name}`.`key` = ?}, KM::DB::Key.get(prop)])
+              AND `#{temp_name}`.`key` = ?}, KMDB::Key.get(prop)])
           }
           { :select => selects.join(', '), :joins => joins.join("\n") }
         }

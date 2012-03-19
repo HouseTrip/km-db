@@ -1,6 +1,6 @@
-require 'km/db/custom_record'
+require 'kmdb/custom_record'
 
-module KM::DB
+module KMDB
   class Dumpfile < CustomRecord
     set_table_name "dumpfiles"
 

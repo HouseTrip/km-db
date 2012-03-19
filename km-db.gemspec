@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
-require File.expand_path("../lib/km/db/version", __FILE__)
+require File.expand_path("../lib/kmdb/version", __FILE__)
 
 Gem::Specification.new do |s|
   s.name        = "km-db"
-  s.version     = KM::DB::VERSION
+  s.version     = KMDB::VERSION
   s.platform    = Gem::Platform::RUBY
   s.authors     = ["HouseTrip"]
   s.email       = ["jtl@housetrip.com"]

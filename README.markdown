@@ -42,7 +42,7 @@ Remember to add `sqlite3-ruby` or `mysql2` to your Gemfile.
 Using imported data
 -------------------
 
-The `KM::DB` module exposes four `ActiveRecord` classes:
+The `KMDB` module exposes four `ActiveRecord` classes:
 `Event`, `Property`, `User` are the main domain objects.
 `Key` is used to intern strings (event and property names) for performance.
 
@@ -50,19 +50,19 @@ The `KM::DB` module exposes four `ActiveRecord` classes:
 
 All visits during Jan. 2012:
 
-    KM::DB::Event.before('2012-02-1').after('2012-01-01').named('visited site').by_date
+    KMDB::Event.before('2012-02-1').after('2012-01-01').named('visited site').by_date
 
 All of a user's visit:
 
-    KM::DB::User.last.events.named('visited site')
+    KMDB::User.last.events.named('visited site')
 
 A user's referers:
     
-    KM::DB::User.last.properties.named('referer').map(&:value)
+    KMDB::User.last.properties.named('referer').map(&:value)
 
 Load some properties with events (uses a left join by default):
 
-    KM::DB::User.last.events.with_properties('a prop', 'another prop').map(&:another_prop)
+    KMDB::User.last.events.with_properties('a prop', 'another prop').map(&:another_prop)
 
 Note that many more complex queries will require building SQL queries directly.
 
@@ -72,16 +72,16 @@ Processing data
 
 You don't have to import to filter your data.
 
-The two classes you're looking for are `KM::DB::Parser` and `KM::DB::ParallelParser`.
+The two classes you're looking for are `KMDB::Parser` and `KMDB::ParallelParser`.
 The latter runs your filter task on all available CPUs, using the `parallel` gem.
 
 The following example counts the number of *aliasing* events in all JSON files under `dumps/`:
 
     require 'rubygems'
-    require 'km/db'
+    require 'kmdb'
 
     counter = 0
-    parser = KM::DB::Parser.new
+    parser = KMDB::Parser.new
     parser.add_filter do |text,event|
         counter += 1 if event['_p2']
     end

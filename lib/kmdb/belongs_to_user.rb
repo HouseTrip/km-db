@@ -1,8 +1,8 @@
-module KM::DB
+module KMDB
   module BelongsToUser
     def self.included(mod)
       mod.class_eval do
-        belongs_to :user,  :class_name => 'KM::DB::User'
+        belongs_to :user,  :class_name => 'KMDB::User'
         validates_presence_of :user
 
         named_scope :user_is, lambda { |user| 

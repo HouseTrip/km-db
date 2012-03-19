@@ -6,7 +6,7 @@
 =end
 
 require 'rubygems'
-require 'km/db'
+require 'kmdb'
 
 if KM::DB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
   parser_class = KM::DB::ParallelParser

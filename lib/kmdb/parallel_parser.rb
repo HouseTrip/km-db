@@ -1,7 +1,7 @@
-require 'km/db/parser'
+require 'kmdb/parser'
 require 'parallel'
 
-module KM::DB
+module KMDB
   class ParallelParser < Parser
     
     def initialize(options = {})
@@ -23,7 +23,7 @@ module KM::DB
       Process.fork do
         @pipe_rd.close
         Parallel.each(inputs, :in_processes => @worker_count) do |input|
-          KM::DB::Event.connection.reconnect!
+          KMDB::Event.connection.reconnect!
           log "Worker #{Process.pid} starting #{input}"
           $0 = "worker: #{input}"
           process_events_in_file(input)

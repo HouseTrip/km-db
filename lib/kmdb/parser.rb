@@ -3,7 +3,7 @@ require 'pathname'
 require 'progressbar'
 require 'pstore'
 
-module KM::DB
+module KMDB
   class Parser
     class ProgressBar < ::ProgressBar
       attr_writer :title

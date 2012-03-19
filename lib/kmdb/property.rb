@@ -1,14 +1,14 @@
-require 'km/db/belongs_to_user'
+require 'kmdb/belongs_to_user'
 
-module KM::DB
+module KMDB
   class Property < CustomRecord
     include BelongsToUser
 
     set_table_name "properties"
-    belongs_to :event, :class_name => 'KM::DB::Event'
+    belongs_to :event, :class_name => 'KMDB::Event'
 
     default_scope :order => 't DESC'
-    named_scope :named, lambda { |name| { :conditions => { :key => KM::DB::Key.get(name) } } }
+    named_scope :named, lambda { |name| { :conditions => { :key => KMDB::Key.get(name) } } }
 
     def self.set(hash, stamp=nil, user=nil, event=nil)
       user_name = hash.delete('_p')

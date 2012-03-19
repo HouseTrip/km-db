@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    km-db (0.1)
+    km-db (0.2)
       activerecord (~> 2.3.12)
       andand
       parallel
