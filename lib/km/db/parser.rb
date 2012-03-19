@@ -46,7 +46,10 @@ module KM::DB
     def run(argv)
       inputs = list_files_in(argv)
       total_bytes = total_size_of_files(inputs)
-
+      log "total bytes : #{total_bytes}"
+      total_bytes -= inputs.map { |p| Dumpfile.get(p, @resume_job) }.compact.map(&:offset).sum
+      log "left to process : #{total_bytes}"
+      
       @processed_bytes = 0
       @progress = ProgressBar.new("-" * 20, total_bytes)
       @progress.long_running if @progress.respond_to?(:long_running)

@@ -14,6 +14,9 @@ module KM::DB
 
       inputs = list_files_in(argv)
       total_bytes = total_size_of_files(inputs)
+      log "total bytes : #{total_bytes}"
+      total_bytes -= inputs.map { |p| Dumpfile.get(p, @resume_job) }.compact.map(&:offset).sum
+      log "left to process : #{total_bytes}"
 
       # Start workers
       log "Using #{@worker_count} workers."
