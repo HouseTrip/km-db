@@ -1,0 +1,39 @@
+Hi - This is KISSmetrics just letting you know that we'll be exporting your data here shortly. The data will be organized into subdirectories like so:
+
+Your S3 Bucket/
+  revisions/
+    1.json
+    2.json
+    ...
+    N.json
+    
+We will export all of your data from when you first sent us data. We export data every 12 hours and export as many days of your data as possible in a given time limit. You can check on the progress of your data export at https://www.kissmetrics.com/data_export. We will only export data up to "yesterday". 
+
+If you plan to script a system to import this data you can easily set up a cron or other mechanism to check for the new data file every 5 minutes.
+
+Inside of each JSON file you will find lines of JSON. Each line is a single hash separated by a newline. To parse, read each line one at a time. 
+
+If you passed us an event with no additional properties the line would export as:
+
+  {"_p":"john", "_t":1234567890, "_n":"Visited Site"}
+  
+* _p is the person's identity who did the event.
+* _t is the UTC UNIX timestamp of when the event happened.
+* _n is the name of of the event
+
+If you passed in an event with properties it would export as:
+
+  {"_p":"john", "_t":1234567890, "_n":"Visited Site", "url":"http://mysite.com", "campaign name":"my campaign"}
+  
+If a you passed us just properties with no event it would export as:
+
+  {"_p":"john", "_t":1234567890, "url":"http://mysite.com", "campaign name":"my campaign"}
+
+If you set each property as two separate calls they will be exported as two separate lines:
+
+  {"_p":"john", "_t":1234567890, "url":"http://mysite.com"}
+  {"_p":"john", "_t":1234567890, "campaign name":"my campaign"}
+  
+If you passed us an alias command it will be exported as:
+
+  {"_p":"john", "_t":1234567890, "_p2":"john@kissmetrics.com"}

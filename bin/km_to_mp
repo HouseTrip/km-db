@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+=begin
+    
+  Send KM events to Mixpanel after the dumps have been migrated to a database.
+
+=end
+
+require 'rubygems'
+require 'kmdb'
+
+KMDB::User.find_each(:conditions => "alias_id > 0") do |user|
+  KMDB::Mixpanel.alias(user)
+end
+
+KMDB::Event.find_each() do |event|
+  #puts event
+end
+
+KMDB::Property.find_each(:conditions => {:event_id => nil}) do |property|
+  #puts property
+end

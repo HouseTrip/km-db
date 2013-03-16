@@ -8,7 +8,7 @@ module KMDB
 
     has_many :events,     :class_name => 'KMDB::Event'
     belongs_to :alias,    :class_name => 'KMDB::User' 
-      # points to the aliased user. if set, no properties/events should belong to this user
+     # points to the aliased user. if set, no properties/events should belong to this user
 
     validates_presence_of   :name
     validates_uniqueness_of :name
@@ -25,11 +25,11 @@ module KMDB
     end
 
     # mark this user as aliasing another
-    def aliases!(other)
+    def aliases!(other, time)
       [Property,Event].each do |model|
         model.user_is(self).update_all({:user_id => other.id})
       end
-      self.update_attributes!(:alias => other)
+      self.update_attributes!(:alias => other, :t => time)
     end
 
     # return the user named `name` (creating it if necessary)
@@ -42,7 +42,11 @@ module KMDB
 
 
     # mark the two names as pointing to the same user
-    def self.alias!(name1, name2)
+    def self.alias!(hash)
+      name1 = hash.delete('_p')
+      name2 = hash.delete('_p2')
+      stamp = Time.at hash.delete('_t')
+
       u1 = get(name1)
       u2 = get(name2)
       $stderr.write "Warning: user '#{user.name}' has an alias\n" if u1.alias
@@ -51,9 +55,8 @@ module KMDB
       # nothing to do if both names already point to the same user
       return if u1 == u2  
 
-      u2.aliases! u1
+      u2.aliases!(u1, stamp)
     end
-
 
     # duplication can occur during parallel imports because we're not running transactionally.
     def self.fix_duplicates!
@@ -61,7 +64,7 @@ module KMDB
         named(name).all.tap do |all_users|
           kept_user = all_users.pop
           all_users.each do |user|
-            user.aliases! kept_user
+            user.aliases!(kept_user, user.t)
             user.destroy
           end
         end
@@ -76,7 +79,7 @@ module KMDB
         origin = find(user.alias_id)
         origin = origin.alias while origin.alias # go up the chain
         $stderr.write "Aliasing #{user.name} -> #{origin.name}\n"
-        user.aliases!(origin)
+        user.aliases!(origin, user.t)
       end
     end
   end

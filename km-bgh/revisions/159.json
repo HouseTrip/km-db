@@ -1,0 +1,11 @@
+{"_n":"visited site","_p":"foo","_t":1355430044}
+{"_n":"visited site","_p":"foo","_t":1355430054}
+{"variation":"A B","_n":"visited site","_p":"foo","_t":1355430098}
+{"variation":"A B","_n":"visited site","_p":"foo","_t":1355430108}
+{"viewed url":"http://myproject.localhacks.com/~efung/","referrer":"Direct","_n":"page view","_p":"kissmetrics.tester@gmail.com","_t":1355429980}
+{"referrer":"Direct","url":"http://myproject.localhacks.com/~efung/","_n":"visited site","_p":"kissmetrics.tester@gmail.com","_t":1355429980}
+{"viewed url":"http://myproject.localhacks.com/~efung/","referrer":"Direct","_n":"page view","_p":"kissmetrics.tester@gmail.com","_t":1355431650}
+{"ab variation":"A B","_n":"visited site","_p":"foo","_t":1355430563}
+{"ab variation":"A B","_n":"visited site","_p":"foo","_t":1355430571}
+{"viewed url":"http://myproject.localhacks.com/~efung/","referrer":"Direct","_n":"page view","_p":"kissmetrics.tester@gmail.com","_t":1355430583}
+{"ab variation":"A B","_n":"visited site","_p":"kissmetrics.tester@gmail.com","_t":1355430614}
