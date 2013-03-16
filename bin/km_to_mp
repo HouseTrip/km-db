@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+=begin
+    
+  Send KM events to Mixpanel after the dumps have been migrated to a database.
+
+=end
+
+require 'rubygems'
+require 'kmdb'
+
+if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
+  parser_class = KMDB::ParallelParser
+else
+  parser_class = KMDB::Parser
+end
+
+parser = parser_class.new(:resume  => 'import', 
+                          :verbose => true)
+
+KMDB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
+
+
+KMDB::Event.find_each() do |event|
+  export.add_invoices(invoices)
+end
