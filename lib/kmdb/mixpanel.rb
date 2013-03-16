@@ -20,9 +20,8 @@ module KMDB
 }
 =end
 
-    def self.record(stamp, key, user_name)
+    def self.record(event)
 
-      #puts @host + "?_k=" + @key + "&_t=" + stamp.strftime("%s") + "&_n=" + URI.escape(KMDB::Key.find(key).string) + "&_p=" + URI.escape(user_name)
     end
 
 =begin
@@ -39,20 +38,26 @@ https://mixpanel.com/docs/managing-users/assigning-your-own-unique-identifiers-t
     }
 }
 =end
-    def self.alias(user1, user2, time)
+    def self.alias(user)
       # todo
+
+      puts "User " + user.name + " is aliased to " + KMDB::User.find(user.alias_id).name unless user.alias_id == nil
+
+=begin
       props = {
         :alias => user1,
         :distinct_id => user2,
         :time => time,
         :token => @key
       }
+=end
       json = {
         :event => "$create_alias", 
         :properties => props
       }
 
       puts Base64.encode64(json.to_json)
+
     end
 
 =begin
@@ -74,7 +79,6 @@ These correspond to the set, increment and track_charge functions in our JS libr
 
     def self.set(stamp, data, user_name)
       # todo
-      #puts @host + "?_k=" + @key + "&_t=" + stamp.strftime("%s") + "&_n=" + URI.escape(KMDB::Key.find(key).string) + "&_p=" + URI.escape(user_name)
     end
 
   end

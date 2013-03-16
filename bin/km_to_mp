@@ -8,14 +8,14 @@
 require 'rubygems'
 require 'kmdb'
 
-KMDB::Event.find_each() do |event|
-  puts event
+KMDB::User.find_each() do |user|
+  KMDB::Mixpanel.alias(user)
 end
 
-KMDB::User.find_each() do |user|
-  puts user
+KMDB::Event.find_each() do |event|
+  #puts event
 end
 
 KMDB::Property.find_each(:conditions => {:event_id => nil}) do |property|
-  puts property
+  #puts property
 end
