@@ -20,7 +20,7 @@ parser = parser_class.new(:resume  => 'import',
 # import events by category
 parser.add_filter { |text, event|
   if event['_p2']
-    KMDB::User.alias! event['_p'], event['_p2']
+    KMDB::User.alias! event
   elsif event['_n']
     KMDB::Event.record event
   else

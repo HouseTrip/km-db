@@ -39,8 +39,9 @@ module KMDB
       add_index :properties, [:event_id]
 
       create_table :users do |t|
-        t.string  :name, :limit => 48
-        t.integer :alias_id
+        t.string   :name, :limit => 48
+        t.integer  :alias_id
+        t.datetime :t
       end
       add_index :users, [:name]
 
