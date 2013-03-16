@@ -8,18 +8,14 @@
 require 'rubygems'
 require 'kmdb'
 
-if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
-  parser_class = KMDB::ParallelParser
-else
-  parser_class = KMDB::Parser
+KMDB::Event.find_each() do |event|
+  puts event
 end
 
-parser = parser_class.new(:resume  => 'import', 
-                          :verbose => true)
+KMDB::User.find_each() do |user|
+  puts user
+end
 
-KMDB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
-
-
-KMDB::Event.find_each() do |event|
-  export.add_invoices(invoices)
+KMDB::Property.find_each(:conditions => {:event_id => nil}) do |property|
+  puts property
 end
