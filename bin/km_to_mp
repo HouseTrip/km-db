@@ -8,7 +8,7 @@
 require 'rubygems'
 require 'kmdb'
 
-KMDB::User.find_each() do |user|
+KMDB::User.find_each(:conditions => "alias_id > 0") do |user|
   KMDB::Mixpanel.alias(user)
 end
 

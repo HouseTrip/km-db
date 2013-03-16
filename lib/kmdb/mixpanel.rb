@@ -39,18 +39,12 @@ https://mixpanel.com/docs/managing-users/assigning-your-own-unique-identifiers-t
 }
 =end
     def self.alias(user)
-      # todo
-
-      puts "User " + user.name + " is aliased to " + KMDB::User.find(user.alias_id).name unless user.alias_id == nil
-
-=begin
       props = {
-        :alias => user1,
-        :distinct_id => user2,
-        :time => time,
+        :alias => user.name,
+        :distinct_id => KMDB::User.find(user.alias_id).name,
+        :time => user.t.strftime('%s'),
         :token => @key
       }
-=end
       json = {
         :event => "$create_alias", 
         :properties => props
