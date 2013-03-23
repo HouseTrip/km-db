@@ -8,10 +8,10 @@
 require 'rubygems'
 require 'kmdb'
 
-if KM::DB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
-  parser_class = KM::DB::ParallelParser
+if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
+  parser_class = KMDB::ParallelParser
 else
-  parser_class = KM::DB::Parser
+  parser_class = KMDB::Parser
 end
 
 parser = parser_class.new(:resume  => 'import', 
@@ -20,17 +20,17 @@ parser = parser_class.new(:resume  => 'import',
 # import events by category
 parser.add_filter { |text, event|
   if event['_p2']
-    KM::DB::User.alias! event['_p'], event['_p2']
+    KMDB::User.alias! event['_p'], event['_p2']
   elsif event['_n']
-    KM::DB::Event.record event
+    KMDB::Event.record event
   else
-    KM::DB::Property.set event
+    KMDB::Property.set event
   end
   
   event
 }
 
 parser.run(ARGV)                     # heavy lifting here
-KM::DB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
-KM::DB::User.resolve_alias_chains!   # detect and filter alias chains
-KM::DB::Key.fix_duplicates!          # remove key duplicates
+KMDB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
+KMDB::User.resolve_alias_chains!   # detect and filter alias chains
+KMDB::Key.fix_duplicates!          # remove key duplicates
