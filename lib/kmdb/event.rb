@@ -1,6 +1,7 @@
 require 'kmdb/custom_record'
 require 'kmdb/belongs_to_user'
 require 'kmdb/has_properties'
+require 'active_support/all' # pulls in timezone stuff (plus lots more)
 
 module KMDB
   class Event < CustomRecord
@@ -30,7 +31,8 @@ module KMDB
       user ||= User.get(user_name)
       raise UserError.new "User missing for '#{user_name}'" unless user.present?
 
-      stamp = Time.at hash.delete('_t')
+      Time.zone ||= 'UTC'
+      stamp = Time.zone.at hash.delete('_t')
       key = Key.get hash.delete('_n')
       event = create(:t => stamp, :n => key, :user => user)
       Property.set(hash, stamp, user, event)
