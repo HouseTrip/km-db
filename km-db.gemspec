@@ -18,12 +18,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rake"
   s.add_development_dependency "json"
   s.add_development_dependency "sqlite3-ruby"
-  
+
   s.add_dependency "yajl-ruby"
   s.add_dependency "progressbar"
   s.add_dependency "parallel"
   s.add_dependency "andand"
-  s.add_dependency "activerecord", "~> 2.3.12"
+  s.add_dependency "activerecord", "~> 3.0.0"
 
   s.files        = `git ls-files`.split("\n")
   s.test_files   = `git ls-files -- {test,spec,features}/*`.split("\n")
