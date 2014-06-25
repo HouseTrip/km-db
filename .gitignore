@@ -1,0 +1,6 @@
+data/
+pkg/
+tags
+.DS_Store
+.bundle
+
