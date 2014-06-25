@@ -1,13 +1,13 @@
-require 'kmdb/custom_record'
-require 'kmdb/belongs_to_user'
-require 'kmdb/has_properties'
+require 'kmdb/models/custom_record'
+require 'kmdb/concerns/belongs_to_user'
+require 'kmdb/concerns/has_properties'
 
 module KMDB
   class Event < CustomRecord
     include BelongsToUser
     include HasProperties
 
-    set_table_name "events"
+    set_table_name 'events'
 
     named_scope :before, lambda { |date| { :conditions => ["`#{table_name}`.`t` < ?", date] } }
     named_scope :after,  lambda { |date| { :conditions => ["`#{table_name}`.`t` > ?", date] } }

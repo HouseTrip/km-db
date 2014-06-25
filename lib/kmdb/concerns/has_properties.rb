@@ -5,6 +5,8 @@
   Trait shared by Event and User.
 
 =end
+require 'kmdb/models/property'
+require 'kmdb/models/key'
 
 module KMDB
   module HasProperties

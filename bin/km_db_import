@@ -7,14 +7,15 @@
 
 require 'rubygems'
 require 'kmdb'
+require 'kmdb/models/custom_record'
+require 'kmdb/parser'
+require 'kmdb/models/user'
+require 'kmdb/models/event'
+require 'kmdb/models/property'
 
-# if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
-  # parser_class = KMDB::ParallelParser
-# else
-  parser_class = KMDB::Parser
-# end
+KMDB::CustomRecord.connect_to_km_db!
 
-parser = parser_class.new(:resume  => 'import', 
+parser = KMDB::Parser.new(:resume  => 'import', 
                           :verbose => true)
 
 # import events by category

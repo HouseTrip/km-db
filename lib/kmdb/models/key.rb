@@ -4,11 +4,11 @@
 
 =end
 
-require 'kmdb/custom_record'
+require 'kmdb/models/custom_record'
 
 module KMDB
   class Key < CustomRecord
-    set_table_name "keys"
+    set_table_name 'keys'
 
     has_many :events,     :foreign_key => :n,   :class_name => 'KMDB::Event',    :dependent => :delete_all
     has_many :properties, :foreign_key => :key, :class_name => 'KMDB::Property', :dependent => :delete_all

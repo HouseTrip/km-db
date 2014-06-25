@@ -43,6 +43,7 @@ module KMDB
         config.merge! YAML.load(ERB.new(File.open(config_path).read).result)
         break
       end
+      puts config.inspect
       establish_connection(config)
 
       unless connection.table_exists?('events')

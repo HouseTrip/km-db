@@ -1,6 +1,7 @@
 require 'pathname'
 require 'progressbar'
 require 'oj'
+require 'kmdb/models/dumpfile'
 
 module KMDB
   class Parser

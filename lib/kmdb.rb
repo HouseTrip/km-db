@@ -1,10 +1,9 @@
+require 'kmdb/models/custom_record'
+
 module KMDB
   MaxStringSize = 255
 
-  %w(key user property event user_error dumpfile parser parallel_parser).each do |mod|
-    require "kmdb/#{mod}"
+  def self.connect
+    CustomRecord.connect_to_km_db!
   end
-
-  # Connect to an alternate database when the module is loaded
-  CustomRecord.connect_to_km_db!
 end

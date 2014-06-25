@@ -3,8 +3,9 @@
   Setup a custom database for KissMetrics tracking events.
 
 =end
-
 require 'active_record'
+require 'kmdb'
+require 'kmdb/models/custom_record'
 
 module KMDB
   class SetupEventsDatabase < ActiveRecord::Migration

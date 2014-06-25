@@ -1,4 +1,5 @@
-require 'kmdb/has_properties'
+require 'kmdb/models/custom_record'
+require 'kmdb/concerns/has_properties'
 
 module KMDB
   class User < CustomRecord

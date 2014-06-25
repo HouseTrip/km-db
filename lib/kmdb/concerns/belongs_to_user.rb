@@ -1,3 +1,5 @@
+require 'kmdb/models/user'
+
 module KMDB
   module BelongsToUser
     def self.included(mod)
