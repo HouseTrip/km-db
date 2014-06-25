@@ -1,5 +1,6 @@
 require 'kmdb/models/custom_record'
 require 'kmdb/concerns/belongs_to_user'
+require 'kmdb/user_error'
 
 module KMDB
   class Property < CustomRecord
