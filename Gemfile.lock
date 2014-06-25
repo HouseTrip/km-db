@@ -4,9 +4,9 @@ PATH
     km-db (0.2.1)
       activerecord (~> 2.3.12)
       andand
+      oj
       parallel
       progressbar
-      yajl-ruby
 
 GEM
   remote: http://eu.yarp.io/
@@ -20,6 +20,7 @@ GEM
     json (1.8.1)
     method_source (0.8.2)
     mysql2 (0.2.22)
+    oj (1.4.7)
     parallel (1.0.0)
     progressbar (0.21.0)
     pry (0.9.12.6)
@@ -39,7 +40,6 @@ GEM
     sqlite3 (1.3.9)
     sqlite3-ruby (1.3.3)
       sqlite3 (>= 1.3.3)
-    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby

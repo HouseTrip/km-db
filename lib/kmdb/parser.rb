@@ -1,7 +1,6 @@
-require 'yajl/json_gem'
 require 'pathname'
 require 'progressbar'
-require 'pstore'
+require 'oj'
 
 module KMDB
   class Parser
@@ -82,7 +81,7 @@ module KMDB
       end
 
       begin
-        data = JSON.parse(text)
+        data = Oj.load(text)
       rescue JSON::ParserError => e
         log "Warning, JSON parse error in: #{text}"
         raise e if @abort_on_error
