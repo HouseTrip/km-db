@@ -8,11 +8,11 @@
 require 'rubygems'
 require 'kmdb'
 
-if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
-  parser_class = KMDB::ParallelParser
-else
+# if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
+  # parser_class = KMDB::ParallelParser
+# else
   parser_class = KMDB::Parser
-end
+# end
 
 parser = parser_class.new(:resume  => 'import', 
                           :verbose => true)

@@ -1,5 +1,5 @@
 module KMDB
-  MaxStringSize = 48
+  MaxStringSize = 255
 
   %w(key user property event user_error dumpfile parser parallel_parser).each do |mod|
     require "kmdb/#{mod}"
