@@ -31,7 +31,7 @@ module KMDB
     # mark this user as aliasing another
     def aliases!(other)
       [Property,Event].each do |model|
-        model.user_is(self).update_all({:user_id => other.id})
+        model.user_is(self).update_all(user_id: other.id)
       end
       self.update_attributes!(:alias => other)
     end
@@ -75,7 +75,7 @@ module KMDB
 
     # detect alias chains
     def self.resolve_alias_chains!
-      find(:all, :joins => :alias, :conditions => 'aliases_users.alias_id IS NOT NULL').each do |user|
+      joins(:alias).where('aliases_users.alias_id IS NOT NULL').find_each do |user|
         user = find(user.id)
         origin = find(user.alias_id)
         origin = origin.alias while origin.alias # go up the chain

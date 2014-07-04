@@ -32,7 +32,7 @@ module KMDB
         t.integer  :user_id
         t.integer  :event_id
         t.integer  :key
-        t.string   :value,   :limit => 64
+        t.string   :value
         t.datetime :t
       end
       add_index :properties, [:key],      using: :hash

@@ -10,7 +10,7 @@ module KMDB
     self.table_name = 'properties'
     belongs_to :event, :class_name => 'KMDB::Event'
 
-    default_scope :order => 't DESC'
+    default_scope { order('t DESC') }
     scope :named, lambda { |name| where(key: KMDB::Key.get(name)) }
 
     def self.set(hash, stamp=nil, user=nil, event=nil)
@@ -27,6 +27,7 @@ module KMDB
 
       hash.each_pair do |prop_name,value|
         key = Key.get(prop_name)
+        value = value[0...255]
         sql_values << sanitize_sql_array(['(?,?,?,?,?)', stamp,user.id,event_id,key,value])
       end
 
