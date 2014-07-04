@@ -19,14 +19,14 @@ module KMDB
         t.integer  :n
         t.datetime :t
       end
-      add_index :events, [:n]
-      add_index :events, [:user_id]
+      add_index :events, [:n],          using: 'hash'
+      add_index :events, [:user_id],    using: 'hash'
 
 
       create_table :keys do |t|
         t.string :string, :limit => MaxStringSize
       end
-      add_index :keys, [:string]
+      add_index :keys, [:string],         using: 'hash'
 
       create_table :properties do |t|
         t.integer  :user_id
@@ -35,9 +35,9 @@ module KMDB
         t.string   :value,   :limit => 64
         t.datetime :t
       end
-      add_index :properties, [:key]
-      add_index :properties, [:user_id]
-      add_index :properties, [:event_id]
+      add_index :properties, [:key],      using: 'hash'
+      add_index :properties, [:user_id],  using: 'hash'
+      add_index :properties, [:event_id], using: 'hash'
 
       create_table :users do |t|
         t.string  :name, :limit => 48
