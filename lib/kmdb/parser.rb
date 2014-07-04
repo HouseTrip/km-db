@@ -83,7 +83,7 @@ module KMDB
 
       begin
         data = Oj.load(text)
-      rescue JSON::ParserError => e
+      rescue Oj::ParseError => e
         log "Warning, JSON parse error in: #{text}"
         raise e if @abort_on_error
         return
