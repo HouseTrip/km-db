@@ -21,8 +21,7 @@ module KMDB
     ActiveRecord::Base.establish_connection(config)
 
     unless ActiveRecord::Base.connection.table_exists?('events')
-      Migration::SetupEventsDatabase.up
-      reset_column_information
+      Migration.up
     end
   end
 end
