@@ -7,17 +7,18 @@
 require 'kmdb/models/custom_record'
 
 module KMDB
-  class Key < CustomRecord
-    set_table_name 'keys'
+  class Key < ActiveRecord::Base
+    include CustomRecord
+
+    self.table_name = 'keys'
 
     has_many :events,     :foreign_key => :n,   :class_name => 'KMDB::Event',    :dependent => :delete_all
     has_many :properties, :foreign_key => :key, :class_name => 'KMDB::Property', :dependent => :delete_all
 
-    named_scope :has_duplicate, lambda {
-      {
-        :select => "id, string, COUNT(id) AS quantity",
-        :group => :string, :having => "quantity > 1"
-      }
+    scope :has_duplicate, lambda {
+      select('id, string, COUNT(id) AS quantity').
+      group(:string).
+      having('quantity > 1')
     }
 
     def self.get(string)

@@ -4,18 +4,19 @@ require 'kmdb/concerns/has_properties'
 require 'kmdb/user_error'
 
 module KMDB
-  class Event < CustomRecord
+  class Event < ActiveRecord::Base
+    include CustomRecord
     include BelongsToUser
     include HasProperties
 
-    set_table_name 'events'
+    self.table_name = 'events'
 
-    named_scope :before, lambda { |date| { :conditions => ["`#{table_name}`.`t` < ?", date] } }
-    named_scope :after,  lambda { |date| { :conditions => ["`#{table_name}`.`t` > ?", date] } }
+    scope :before, lambda { |date| where("`#{table_name}`.`t` < ?", date) }
+    scope :after,  lambda { |date| where("`#{table_name}`.`t` > ?", date) }
 
-    named_scope :named, lambda { |name| { :conditions => { :n => KMDB::Key.get(name) } } }
+    scope :named, lambda { |name| where(n: KMDB::Key.get(name)) }
 
-    named_scope :by_date, lambda { { :order => "`#{table_name}`.`t` ASC" } }
+    scope :by_date, lambda { order("`#{table_name}`.`t` ASC") }
 
     # return value of property
     def prop(name)

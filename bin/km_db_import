@@ -13,7 +13,9 @@ require 'kmdb/models/user'
 require 'kmdb/models/event'
 require 'kmdb/models/property'
 
-KMDB::CustomRecord.connect_to_km_db!
+require 'pry'
+
+KMDB.connect
 
 parser = KMDB::Parser.new(:resume  => 'import', 
                           :verbose => true)
@@ -32,6 +34,5 @@ parser.add_filter { |text, event|
 }
 
 parser.run(ARGV)                     # heavy lifting here
-KMDB::Event.connection.reconnect!  # reconnect to database (breaks because of processes forking off)
 KMDB::User.resolve_alias_chains!   # detect and filter alias chains
 KMDB::Key.fix_duplicates!          # remove key duplicates

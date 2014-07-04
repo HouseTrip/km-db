@@ -3,14 +3,15 @@ require 'kmdb/concerns/belongs_to_user'
 require 'kmdb/user_error'
 
 module KMDB
-  class Property < CustomRecord
+  class Property < ActiveRecord::Base
+    include CustomRecord
     include BelongsToUser
 
-    set_table_name 'properties'
+    self.table_name = 'properties'
     belongs_to :event, :class_name => 'KMDB::Event'
 
     default_scope :order => 't DESC'
-    named_scope :named, lambda { |name| { :conditions => { :key => KMDB::Key.get(name) } } }
+    scope :named, lambda { |name| where(key: KMDB::Key.get(name)) }
 
     def self.set(hash, stamp=nil, user=nil, event=nil)
       user_name = hash.delete('_p')

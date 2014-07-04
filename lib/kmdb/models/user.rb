@@ -2,10 +2,11 @@ require 'kmdb/models/custom_record'
 require 'kmdb/concerns/has_properties'
 
 module KMDB
-  class User < CustomRecord
+  class User < ActiveRecord::Base
+    include CustomRecord
     include HasProperties
 
-    set_table_name "users"
+    self.table_name = "users"
 
     has_many :events,     :class_name => 'KMDB::Event'
     belongs_to :alias,    :class_name => 'KMDB::User' 
@@ -14,11 +15,13 @@ module KMDB
     validates_presence_of   :name
     validates_uniqueness_of :name
 
-    named_scope :named, lambda { |name| { :conditions => { :name => name } } }
+    scope :named, lambda { |name| where(name: name) }
 
-    named_scope :duplicates, lambda {{
-      :select => "id, COUNT(id) AS quantity", :group => :name, :having => "quantity > 1"
-    }}
+    scope :duplicates, lambda {
+      select('id, COUNT(id) AS quantity').
+      group(:name).
+      having("quantity > 1")
+    }
 
     # return (latest) value of property
     def prop(name)

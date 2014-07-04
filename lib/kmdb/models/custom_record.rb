@@ -10,46 +10,32 @@
 require 'active_record'
 require 'erb'
 require 'yaml'
-require 'kmdb/migration'
 
 
 module KMDB
-  class CustomRecord < ActiveRecord::Base
-    DefaultConfig = {
-      'adapter'  => 'sqlite3',
-      'database' => "test.db"
-    }
-
-    def self.disable_index
-      connection.execute %Q{
-        ALTER TABLE `#{table_name}` DISABLE KEYS;
-      }
+  module CustomRecord
+    def self.included(by)
+      by.extend ClassMethods
     end
 
-    def self.enable_index
-      connection.execute %Q{
-        ALTER TABLE `#{table_name}` ENABLE KEYS;
-      }
-    end
-
-    def self.find_or_create(options)
-      find(:first, :conditions => options) || create(options)
-    end
-
-    def self.connect_to_km_db!
-      config = DefaultConfig.dup
-      ['km_db.yml', 'config/km_db.yml'].each do |config_path|
-        next unless File.exist?(config_path)
-        config.merge! YAML.load(ERB.new(File.open(config_path).read).result)
-        break
+    module ClassMethods
+      def disable_index
+        connection.execute %Q{
+          ALTER TABLE `#{table_name}` DISABLE KEYS;
+        }
       end
-      puts config.inspect
-      establish_connection(config)
 
-      unless connection.table_exists?('events')
-        SetupEventsDatabase.up
-        self.reset_column_information
+      def enable_index
+        connection.execute %Q{
+          ALTER TABLE `#{table_name}` ENABLE KEYS;
+        }
       end
+
+      def find_or_create(options)
+        where(options).first || create!(options)
+        # find(:first, :conditions => options) || create(options)
+      end
+
     end
   end
 end
