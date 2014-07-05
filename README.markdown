@@ -29,14 +29,11 @@ Running reports on raw logs can be less effective than running against a (relati
 
 By default, you events will be imported in `test.db`, a SQLite database.
 
-You can create `km_db.yml` or `config/km_db.yml` to have it import using another adapter, for instance:
+You can set the `DATABASE_URL` environment variable to have it import using another adapter, for instance:
 
-    ---- km_db.yml ----
-    adapter:  mysql2
-    database: km_events
-    user:     root
+    export DATABASE_URL="mysql2://user:sekret@localhost/my_database"
 
-Remember to add `sqlite3-ruby` or `mysql2` to your Gemfile.
+Remember to the gem for your adapter (e.g. `sqlite3-ruby` or `mysql2`) to your Gemfile.
 
 
 Using imported data
