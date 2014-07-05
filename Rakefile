@@ -1,5 +1,10 @@
 require 'bundler'
-require 'rspec/core/rake_task'
-Bundler::GemHelper.install_tasks
+require 'kmdb'
 
-RSpec::Core::RakeTask.new(:spec)
+namespace :db do
+  task :migrate do
+    require 'kmdb'
+    KMDB.connect.migrate
+  end
+end
+

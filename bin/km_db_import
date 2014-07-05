@@ -5,17 +5,16 @@
 
 =end
 
-require 'rubygems'
 require 'kmdb'
-require 'kmdb/models/custom_record'
 require 'kmdb/parser'
 require 'kmdb/models/user'
 require 'kmdb/models/event'
 require 'kmdb/models/property'
+require 'kmdb/models/key'
 
 require 'pry'
 
-KMDB.connect
+KMDB.connect.migrate
 
 parser = KMDB::Parser.new(:resume  => 'import', 
                           :verbose => true)

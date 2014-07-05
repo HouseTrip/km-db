@@ -10,6 +10,8 @@ module KMDB
   class Key < ActiveRecord::Base
     include CustomRecord
 
+    MAX_SIZE = 255
+
     self.table_name = 'keys'
 
     has_many :events,     :foreign_key => :n,   :class_name => 'KMDB::Event',    :dependent => :delete_all
@@ -50,7 +52,7 @@ module KMDB
   private
 
     def self.get_uncached(string)
-      string.size <= MaxStringSize or raise "String is too long"
+      string.size <= MAX_SIZE or raise "String is too long"
       find_or_create(:string => string).id
     end
   end

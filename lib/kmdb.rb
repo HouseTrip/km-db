@@ -1,27 +1,23 @@
-require 'kmdb/models/custom_record'
-require 'kmdb/migration'
+require 'active_record'
 
 module KMDB
-  MaxStringSize = 255
+  DEFAULT_DB_URL = 'sqlite3:test.db'
+  MIGRATIONS_DIR = Pathname(__FILE__).parent.join('kmdb/migrations').cleanpath.to_s
 
-  DefaultConfig = {
-    'adapter'  => 'sqlite3',
-    'database' => 'test.db'
-  }
-
+  def self.env
+    ENV['RACK_ENV'] || ENV['KMDB_ENV'] || 'development'
+  end
 
   def self.connect
-    config = DefaultConfig.dup
-    ['km_db.yml', 'config/km_db.yml'].each do |config_path|
-      next unless File.exist?(config_path)
-      config.merge! YAML.load(ERB.new(File.open(config_path).read).result)
-      break
-    end
-    puts config.inspect
-    ActiveRecord::Base.establish_connection(config)
+    url = ENV.fetch('DATABASE_URL', DEFAULT_DB_URL)
+    puts url
+    ActiveRecord::Base.establish_connection(url)
+    self
+  end
 
-    unless ActiveRecord::Base.connection.table_exists?('events')
-      Migration.up
-    end
+  def self.migrate
+    ActiveRecord::Migration.verbose = true
+    ActiveRecord::Migrator.migrate MIGRATIONS_DIR
+    self
   end
 end

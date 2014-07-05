@@ -1,8 +1,8 @@
 source ENV.fetch('GEM_SOURCE', 'https://rubygems.org')
 
-gem 'progressbar'
-gem 'pry'
+gem 'foreman'
 gem 'mysql2'
+gem 'sqlite3-ruby'
 
-# Specify your gem's dependencies in km.gemspec
 gemspec
+
