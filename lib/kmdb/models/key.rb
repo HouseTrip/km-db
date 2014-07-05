@@ -14,8 +14,8 @@ module KMDB
 
     self.table_name = 'keys'
 
-    has_many :events,     :foreign_key => :n,   :class_name => 'KMDB::Event',    :dependent => :delete_all
-    has_many :properties, :foreign_key => :key, :class_name => 'KMDB::Property', :dependent => :delete_all
+    has_many :events,     foreign_key: :n,   class_name: 'KMDB::Event',    dependent: :delete_all
+    has_many :properties, foreign_key: :key, class_name: 'KMDB::Property', dependent: :delete_all
 
     scope :has_duplicate, lambda {
       select('id, string, COUNT(id) AS quantity').
@@ -31,7 +31,7 @@ module KMDB
     # Replace each duplicate key ID with its most-used variant
     def self.fix_duplicates!
       has_duplicate.map(&:string).each do |string|
-        all_keys = find(:all, :conditions => { :string => string })
+        all_keys = find(:all, conditions: { string: string })
 
         # sort keys by usage
         all_ids = all_keys.map { |key|
@@ -43,8 +43,8 @@ module KMDB
         }
         id_to_keep = all_ids.pop
         $stderr.write "Fixing key '#{string}' #{all_ids.inspect} -> #{id_to_keep.inspect}\n"
-        Event.update_all({ :n => id_to_keep }, ["`events`.`n` IN (?)", all_ids])
-        Property.update_all({ :key => id_to_keep }, ["`properties`.`key` IN (?)", all_ids])
+        Event.update_all({ n: id_to_keep }, ["`events`.`n` IN (?)", all_ids])
+        Property.update_all({ key: id_to_keep }, ["`properties`.`key` IN (?)", all_ids])
         Key.delete_all(["id IN (?)", all_ids])
       end
     end
@@ -53,7 +53,7 @@ module KMDB
 
     def self.get_uncached(string)
       string.size <= MAX_SIZE or raise "String is too long"
-      find_or_create(:string => string).id
+      find_or_create(string: string).id
     end
   end
 end

@@ -12,7 +12,7 @@ module KMDB
   module HasProperties
     def self.included(mod)
       mod.class_eval do
-        has_many :properties, :class_name => 'KMDB::Property'
+        has_many :properties, class_name: 'KMDB::Property'
 
         # scope :with_properties, lambda { |*props|
         #   direction = props.delete(:exclude_missing) ? 'INNER' : 'LEFT'
@@ -27,7 +27,7 @@ module KMDB
         #       ON `#{table_name}`.id = `#{temp_name}`.event_id 
         #       AND `#{temp_name}`.`key` = ?}, KMDB::Key.get(prop)])
         #   }
-        #   { :select => selects.join(', '), :joins => joins.join("\n") }
+        #   { select: selects.join(', '), joins: joins.join("\n") }
         # }
       end
     end

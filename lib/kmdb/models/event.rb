@@ -34,7 +34,7 @@ module KMDB
 
       stamp = Time.at hash.delete('_t')
       key = Key.get hash.delete('_n')
-      event = create(:t => stamp, :n => key, :user => user)
+      event = create(t: stamp, n: key, user: user)
       Property.set(hash, stamp, user, event)
     end
   end

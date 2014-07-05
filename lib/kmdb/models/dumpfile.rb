@@ -10,7 +10,7 @@ module KMDB
     validates_presence_of :path
 
     def set(offset)
-      update_attributes!(:offset => offset)
+      update_attributes!(offset: offset)
     end
 
     def offset
@@ -22,7 +22,7 @@ module KMDB
       # binding.pry
       # options = { path: pathname.cleanpath.to_s, job: job} 
       # where(options).first || create!(options)
-      find_or_create(:path => pathname.cleanpath.to_s, :job => job)
+      find_or_create(path: pathname.cleanpath.to_s, job: job)
     end
   end
 end

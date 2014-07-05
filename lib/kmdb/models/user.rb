@@ -8,8 +8,8 @@ module KMDB
 
     self.table_name = "users"
 
-    has_many :events,     :class_name => 'KMDB::Event'
-    belongs_to :alias,    :class_name => 'KMDB::User' 
+    has_many :events,     class_name: 'KMDB::Event'
+    belongs_to :alias,    class_name: 'KMDB::User' 
       # points to the aliased user. if set, no properties/events should belong to this user
 
     validates_presence_of   :name
@@ -33,13 +33,13 @@ module KMDB
       [Property,Event].each do |model|
         model.user_is(self).update_all(user_id: other.id)
       end
-      self.update_attributes!(:alias => other)
+      self.update_attributes!(alias: other)
     end
 
     # return the user named `name` (creating it if necessary)
     # if `name` is an alias, return the original user
     def self.get(name)
-      user = named(name).first || create(:name => name)
+      user = named(name).first || create(name: name)
       user = user.alias while user.alias
       return user
     end

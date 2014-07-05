@@ -8,7 +8,7 @@ module KMDB
     include BelongsToUser
 
     self.table_name = 'properties'
-    belongs_to :event, :class_name => 'KMDB::Event'
+    belongs_to :event, class_name: 'KMDB::Event'
 
     default_scope { order('t DESC') }
     scope :named, lambda { |name| where(key: KMDB::Key.get(name)) }
