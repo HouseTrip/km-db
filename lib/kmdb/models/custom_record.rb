@@ -33,7 +33,6 @@ module KMDB
 
       def find_or_create(options)
         where(options).first || create!(options)
-        # find(:first, :conditions => options) || create(options)
       end
 
     end

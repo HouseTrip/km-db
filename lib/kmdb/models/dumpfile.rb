@@ -4,8 +4,6 @@ module KMDB
   class Dumpfile < ActiveRecord::Base
     include CustomRecord
 
-    self.table_name = 'dumpfiles'
-
     validates_presence_of :offset
     validates_presence_of :path
 
@@ -19,9 +17,6 @@ module KMDB
 
     def self.get(pathname, job = nil)
       job ||= 'nil'
-      # binding.pry
-      # options = { path: pathname.cleanpath.to_s, job: job} 
-      # where(options).first || create!(options)
       find_or_create(path: pathname.cleanpath.to_s, job: job)
     end
   end
