@@ -6,8 +6,6 @@ module KMDB
     include CustomRecord
     include HasProperties
 
-    self.table_name = "users"
-
     has_many :events,     class_name: 'KMDB::Event'
     belongs_to :alias,    class_name: 'KMDB::User' 
       # points to the aliased user. if set, no properties/events should belong to this user

@@ -12,8 +12,6 @@ module KMDB
 
     MAX_SIZE = 255
 
-    self.table_name = 'keys'
-
     has_many :events,     foreign_key: :n,   class_name: 'KMDB::Event',    dependent: :delete_all
     has_many :properties, foreign_key: :key, class_name: 'KMDB::Property', dependent: :delete_all
 

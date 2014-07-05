@@ -7,7 +7,6 @@ module KMDB
     include CustomRecord
     include BelongsToUser
 
-    self.table_name = 'properties'
     belongs_to :event, class_name: 'KMDB::Event'
 
     default_scope { order('t DESC') }

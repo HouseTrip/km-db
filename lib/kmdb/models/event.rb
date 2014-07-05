@@ -9,8 +9,6 @@ module KMDB
     include BelongsToUser
     include HasProperties
 
-    self.table_name = 'events'
-
     scope :before, lambda { |date| where("`#{table_name}`.`t` < ?", date) }
     scope :after,  lambda { |date| where("`#{table_name}`.`t` > ?", date) }
 
