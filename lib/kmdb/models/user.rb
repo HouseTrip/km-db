@@ -6,8 +6,8 @@ module KMDB
     include CustomRecord
     include HasProperties
 
-    has_many :events,     class_name: 'KMDB::Event'
-    belongs_to :alias,    class_name: 'KMDB::User' 
+    has_many :events,     class_name: 'KMDB::Event', inverse_of: :user
+    belongs_to :alias,    class_name: 'KMDB::User'
       # points to the aliased user. if set, no properties/events should belong to this user
 
     validates_presence_of   :name
@@ -16,7 +16,7 @@ module KMDB
     scope :named, lambda { |name| where(name: name) }
 
     scope :duplicates, lambda {
-      select('id, COUNT(id) AS quantity').
+      select('id, name, COUNT(id) AS quantity').
       group(:name).
       having("quantity > 1")
     }
@@ -37,7 +37,7 @@ module KMDB
     # return the user named `name` (creating it if necessary)
     # if `name` is an alias, return the original user
     def self.get(name)
-      user = named(name).first || create(name: name)
+      user = named(name).first || create!(name: name)
       user = user.alias while user.alias
       return user
     end
@@ -57,10 +57,12 @@ module KMDB
     end
 
 
-    # duplication can occur during parallel imports because we're not running transactionally.
+    # duplication can occur during parallel imports because
+    # different transactions might add the same user with different IDs
+    # FIXME: this needs a global lock
     def self.fix_duplicates!
       duplicates.map(&:name).each do |name|
-        named(name).all.tap do |all_users|
+        named(name).to_a.tap do |all_users|
           kept_user = all_users.pop
           all_users.each do |user|
             user.aliases! kept_user

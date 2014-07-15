@@ -1,0 +1,14 @@
+#!/usr/bin/env ruby
+=begin
+    
+  Import KM events from the raw dumps.
+
+=end
+
+require 'kmdb'
+require 'kmdb/resque'
+require 'kmdb/jobs/list_files'
+require 'pry'
+
+KMDB::Resque.enqueue(KMDB::Jobs::ListFiles, *ARGV)
+

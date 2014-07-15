@@ -19,7 +19,7 @@ class KmdbInitial < ActiveRecord::Migration
 
 
     create_table :keys do |t|
-      t.string :string, :limit
+      t.string :string
     end
     add_index :keys, [:string],         using: :hash
 
@@ -33,7 +33,7 @@ class KmdbInitial < ActiveRecord::Migration
     add_index :properties, [:key],      using: :hash
     add_index :properties, [:user_id],  using: :hash
     add_index :properties, [:event_id], using: :hash
-    add_index :properties, [:t, :id],   unique: true
+    add_index :properties, [:t, :id],   unique: true # for partitioning purposes
 
     create_table :users do |t|
       t.string  :name, :limit => 48
@@ -43,11 +43,9 @@ class KmdbInitial < ActiveRecord::Migration
 
     create_table :dumpfiles do |t|
       t.string  :path
-      t.string  :job
       t.integer :offset
     end
     add_index :dumpfiles, [:path]
-
   end
 
   def down

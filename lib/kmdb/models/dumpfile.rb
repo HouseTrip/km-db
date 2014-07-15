@@ -1,6 +1,7 @@
 require 'kmdb/models/custom_record'
 
 module KMDB
+  # Remembers which JSON files where imported, and up to which point.
   class Dumpfile < ActiveRecord::Base
     include CustomRecord
 
@@ -15,9 +16,8 @@ module KMDB
       attributes['offset'] || 0
     end
 
-    def self.get(pathname, job = nil)
-      job ||= 'nil'
-      find_or_create(path: pathname.cleanpath.to_s, job: job)
+    def self.get(pathname)
+      find_or_create(path: pathname.cleanpath.to_s)
     end
   end
 end
