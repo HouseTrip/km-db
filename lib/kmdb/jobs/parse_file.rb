@@ -11,7 +11,7 @@ module KMDB
     # Reads a file from disk, 
     # queues jobs for chunks of events.
     class ParseFile
-      @queue = :medium
+      @queue = :low
 
       def self.perform(path)
         new(Pathname.new(path)).work
