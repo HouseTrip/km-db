@@ -13,7 +13,10 @@ module KMDB
       url = ENV.fetch('DATABASE_URL', DEFAULT_DB_URL)
       puts url
       ActiveRecord::Base.establish_connection(url)
-      ActiveRecord::Base.logger = ActiveSupport::Logger.new('tmp/log')
+
+      if ENV.fetch('KMDB_AR_LOG', 'NO') == 'YES'
+        ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT)
+      end
       self
     end
 
