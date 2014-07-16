@@ -14,20 +14,14 @@ module KMDB
 
     scope :named, lambda { |name| where(name: name) }
 
-
     # return (latest) value of property
     def prop(name)
       properties.named(name).first.andand.value
     end
 
-    # mark this user as aliasing another
-
-
-
-
-
-
+    # syntax sugar
+    def self.get(name)
+      find_or_create(name: name)
     end
-    extend ClassMethods
   end
 end
