@@ -1,5 +1,6 @@
 require 'kmdb'
 require 'kmdb/redis'
+require 'kmdb/models/global_uid'
 require 'zlib'
 require 'digest'
 
@@ -44,7 +45,7 @@ module KMDB
     end
 
     def id
-      @id ||= Digest::MD5.hexdigest(_encoded)
+      @id ||= GlobalUID.get('batches').to_s
     end
 
     private
@@ -62,7 +63,7 @@ module KMDB
 
     module SharedMethods
       def redis
-        KMDB::Redis.connection
+        @_redis ||= KMDB::Redis.namespaced('kmdb:batches')
       end
     end
     include SharedMethods
