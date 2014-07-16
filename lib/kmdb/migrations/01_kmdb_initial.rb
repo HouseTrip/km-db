@@ -44,6 +44,10 @@ class KmdbInitial < ActiveRecord::Migration
     end
     add_index :users, [:name],          using: :hash, unique: true
 
+    create_table :ignored_users do |t|
+      t.string :name
+    end
+
     create_table :aliases do |t|
       t.string   :name1
       t.string   :name2
