@@ -1,4 +1,5 @@
 data/
+tmp/
 pkg/
 tags
 .DS_Store
