@@ -28,5 +28,6 @@ module KMDB
 
 
     end
+    extend ClassMethods
   end
 end
