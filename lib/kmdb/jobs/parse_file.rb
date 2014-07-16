@@ -2,7 +2,7 @@ require 'kmdb'
 require 'pathname'
 require 'kmdb/models/dumpfile'
 require 'kmdb/models/event_batch'
-require 'kmdb/jobs/parse_batch'
+require 'kmdb/jobs/record_batch'
 require 'kmdb/resque'
 require 'oj'
 
@@ -49,7 +49,7 @@ module KMDB
 
       def _save_batch(batch)
         saved_batch = EventBatch.new(batch).save!
-        Resque.enqueue(Jobs::ParseBatch, saved_batch.id)
+        Resque.enqueue(Jobs::RecordBatch, saved_batch.id)
         batch.clear
       end
      
@@ -73,8 +73,6 @@ module KMDB
       # text line in, event hash out
       def _parse_event(text)
         return if text.nil?
-        # return if @exclude_regexps.any? { |re| text =~ re }
-        # return unless @include_regexps.all? { |re| text =~ re }
 
         # filter strange utf-8 encoding/escaping found in KM dumps   
         if text =~ /(\\[0-9]{3})+/
