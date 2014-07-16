@@ -9,7 +9,6 @@ Gem::Specification.new do |s|
   s.email       = ['julien.letessier@gmail.com']
   s.homepage    = 'https://github.com/housetrip/km-db'
   s.summary     = 'Process KISSmetrics data dumps'
-  s.description = 'Process KISSmetrics data dumps'
 
   s.add_development_dependency 'bundler'
   s.add_development_dependency 'rspec', '~> 2.4.0'
