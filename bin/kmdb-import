@@ -10,5 +10,5 @@ require 'kmdb/resque'
 require 'kmdb/jobs/list_files'
 require 'pry'
 
-KMDB::Resque.enqueue(KMDB::Jobs::ListFiles, *ARGV)
+KMDB::Resque.enqueue(KMDB::Jobs::ListFiles)
 

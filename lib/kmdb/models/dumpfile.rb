@@ -1,4 +1,5 @@
 require 'kmdb/models/custom_record'
+require 'kmdb/models/json_file'
 
 module KMDB
   # Remembers which JSON files where imported, and up to which point.
@@ -6,7 +7,7 @@ module KMDB
     include CustomRecord
 
     validates_presence_of :offset
-    validates_presence_of :path
+    validates_presence_of :revision
 
     def set(offset)
       update_attributes!(offset: offset)
@@ -16,8 +17,17 @@ module KMDB
       attributes['offset'] || 0
     end
 
-    def self.get(pathname)
-      find_or_create(path: pathname.cleanpath.to_s)
+    def file
+      JsonFile.new(revision)
+    end
+
+    def complete?
+      return if offset.nil? || length.nil?
+      offset >= length
+    end
+
+    def self.get(revision)
+      find_or_create(revision: revision)
     end
   end
 end

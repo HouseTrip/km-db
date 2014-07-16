@@ -13,20 +13,19 @@ module KMDB
     class ParseFile
       @queue = :low
 
-      def self.perform(path)
-        new(Pathname.new(path)).work
+      def self.perform(id)
+        new(JsonFile.new(id)).work
       end
 
-      def initialize(path)
-        raise ArgumentError unless path.kind_of?(Pathname)
-        @path = path
+      def initialize(file)
+        @file = file
       end
       
       def work
         current_batch = []
         current_stamp = nil
 
-        _each_event_in_file(@path) do |event|
+        _each_event_in_file(@file) do |event|
           if event.nil?
             _save_batch(current_batch)
             true
@@ -55,15 +54,15 @@ module KMDB
      
       # yields event hashes; yields nil once after the last event.
       # notes down progress in Dumpfile when the yield returns true.
-      def _each_event_in_file(pathname)
-        pathname.open do |input|
-          dumpfile = Dumpfile.get(pathname)
-          log "Starting file #{pathname} from offset #{dumpfile.offset}"
-          input.seek(dumpfile.offset)
+      def _each_event_in_file(file)
+        file.open do |input|
+          meta = file.metadata
+          log "Parsing file #{file.revision} from offset #{meta.offset}"
+          input.seek(meta.offset)
           while true
             line = input.gets
             if yield _parse_event(line)
-              dumpfile.set(input.tell)
+              meta.set(input.tell)
             end
             break if line.nil?
           end
