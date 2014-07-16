@@ -9,8 +9,7 @@ module KMDB
 
         scope :user_is, lambda { |user| 
           user.kind_of?(User) or raise TypeError.new("Not a kind of User")
-          where(:user_id, user.id)
-          # { conditions: { user_id: user.id } }
+          where(user_id: user.id)
         }
       end
     end
