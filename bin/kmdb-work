@@ -2,15 +2,16 @@
 
 require 'kmdb'
 require 'kmdb/resque'
-require 'kmdb/jobs/list_files'
-require 'kmdb/jobs/parse_file'
-require 'kmdb/jobs/parse_batch'
-require 'kmdb/jobs/unalias_user'
 require 'pry'
 
 # suppress a silly warning
 require 'i18n'
 I18n.enforce_available_locales = false
+
+# load all jobs
+Dir[File.expand_path('../../lib/kmdb/jobs/*.rb', __FILE__)].each do |job|
+  require job
+end
 
 
 KMDB.connect
