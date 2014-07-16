@@ -25,15 +25,16 @@ module KMDB
       KMDB::Key.find(n).value
     end
 
-    def self.record(hash)
+    def self.record(hash, tid: nil)
       user_name = hash.delete('_p')
       user ||= User.get(user_name)
       raise UserError.new "User missing for '#{user_name}'" unless user.present?
 
       stamp = Time.at hash.delete('_t')
       key = Key.get hash.delete('_n')
-      event = create(t: stamp, n: key, user: user)
-      Property.set(hash, stamp, user, event)
+      event = create(t: stamp, n: key, user: user, tid: tid)
+      Property.set(hash, stamp: stamp, user: user, event: event, tid: tid)
+      event
     end
   end
 end

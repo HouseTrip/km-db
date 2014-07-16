@@ -32,9 +32,22 @@ module KMDB
       end
 
       def find_or_create(options)
+        retries ||= 5
         where(options).first || create!(options)
+      rescue ActiveRecord::RecordNotUnique, ActiveRecord::RecordInvalid
+        $stderr.write("could not create #{self.name} with #{options.inspect}, retrying (#{retries})}\n")
+        retry unless (retries -= 1).zero?
+        raise
       end
 
+      def commit(tid)
+        where(tid: tid).update_all(tid: nil)
+      end
+
+      def clear_uncommitted
+        # TODO: this needs to be protected by a global lock
+        where('tid IS NOT NULL').delete_all
+      end
     end
   end
 end
