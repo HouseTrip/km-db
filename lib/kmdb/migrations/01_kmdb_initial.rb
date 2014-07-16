@@ -57,6 +57,7 @@ class KmdbInitial < ActiveRecord::Migration
 
     create_table :dumpfiles do |t|
       t.string  :path
+      t.integer :length
       t.integer :offset
       t.timestamps
     end
