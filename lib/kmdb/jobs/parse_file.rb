@@ -44,7 +44,7 @@ module KMDB
       private
 
       def _batch_size
-        20
+        250
       end
 
       def _save_batch(batch)
