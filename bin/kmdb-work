@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
-
 require 'kmdb'
 require 'kmdb/resque'
-require 'pry'
 
 # suppress a silly warning
 require 'i18n'

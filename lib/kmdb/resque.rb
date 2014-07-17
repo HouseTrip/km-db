@@ -7,8 +7,6 @@ module KMDB
       def enqueue(*args)
         _configure
         ::Resque.enqueue(*args)
-      rescue StandardError => e
-        binding.pry
       end
 
       def work
