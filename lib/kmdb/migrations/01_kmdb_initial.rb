@@ -61,7 +61,7 @@ class KmdbInitial < ActiveRecord::Migration
       t.integer :offset
       t.timestamps
     end
-    add_index :dumpfiles, [:path]
+    add_index :dumpfiles, [:revision]
   end
 
   def down
