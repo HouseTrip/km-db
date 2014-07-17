@@ -44,7 +44,7 @@ module KMDB
       private
 
       def _batch_size
-        250
+        Integer(ENV.fetch('KMDB_BATCH_SIZE', 100))
       end
 
       def _save_batch(batch)
