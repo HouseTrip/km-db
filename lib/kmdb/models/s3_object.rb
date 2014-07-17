@@ -35,7 +35,14 @@ module KMDB
     end
 
     def _tempfile
-      @_tempfile ||= Tempfile.new('kmdb')
+      @_tempfile ||= begin
+        Pathname.new('tmp').mkpath
+        Tempfile.new('kmdb', 'tmp')
+      end
+    end
+
+    def _tempdir
+      Pathname.new('tmp/').mk
     end
 
     def _directory
