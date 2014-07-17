@@ -16,6 +16,7 @@ module KMDB
       _log "downloading"
       system 'curl', '-o', _tempfile.path, '--silent', _file.url(_expiry)
       raise "Download failed for #{@path}" unless $?.success?
+      target.parent.mkpath
       File.rename(_tempfile.path, target.to_s)
       true
     end
