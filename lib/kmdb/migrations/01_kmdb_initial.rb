@@ -56,7 +56,7 @@ class KmdbInitial < ActiveRecord::Migration
     add_index :aliases, [:name1, :name2], unique: true
 
     create_table :dumpfiles do |t|
-      t.string  :path
+      t.integer :revision
       t.integer :length
       t.integer :offset
       t.timestamps
