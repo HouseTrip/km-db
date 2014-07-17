@@ -5,8 +5,12 @@ module KMDB
   class Alias < ActiveRecord::Base
     module ClassMethods
       def record(name1, name2, stamp)
+        retries ||= 5
         name1, name2 = _sorted(name2, name1)
         where(name1: name1, name2: name2).first || create!(name1: name1, name2: name2, t: Time.at(stamp))
+      rescue ActiveRecord::RecordNotUnique
+        retry unless (retries -= 1).zero?
+        raise
       end
 
       private
