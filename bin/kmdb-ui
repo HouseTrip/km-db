@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+
+exec 'rackup', File.expand_path('../../config.ru', __FILE__)
