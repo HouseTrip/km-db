@@ -1,7 +1,6 @@
 require 'active_record'
 
 module KMDB
-  DEFAULT_DB_URL = 'sqlite3:test.db'
   MIGRATIONS_DIR = Pathname(__FILE__).parent.join('kmdb/migrations').cleanpath.to_s
 
   module ModuleMethods
@@ -10,7 +9,7 @@ module KMDB
     end
 
     def connect
-      url = ENV.fetch('DATABASE_URL', DEFAULT_DB_URL)
+      url = ENV.fetch('DATABASE_URL')
       puts url
       ActiveRecord::Base.establish_connection(url)
 
