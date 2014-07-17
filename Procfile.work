@@ -1,1 +1,1 @@
-worker: bundle exec bin/kmdb-work
+resque: bundle exec bin/kmdb-work

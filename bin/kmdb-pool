@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+exec(
+  'foreman', 'start',
+  '--procfile=%s' % File.expand_path('../../Procfile.work', __FILE__),
+  '--formation=resque=%s' % ENV.fetch('RESQUE_WORKERS', 1)
+)
+
