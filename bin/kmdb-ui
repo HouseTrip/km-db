@@ -1,3 +1,6 @@
 #!/usr/bin/env ruby
 
-exec 'rackup', File.expand_path('../../config.ru', __FILE__)
+exec('rackup',
+  '--port', ENV.fetch('PORT'),
+  File.expand_path('../../config.ru', __FILE__)
+)
