@@ -7,8 +7,9 @@
 
 require 'kmdb'
 require 'kmdb/resque'
+require 'kmdb/jobs/find_files'
 require 'kmdb/jobs/list_files'
 require 'pry'
 
-KMDB::Resque.enqueue(KMDB::Jobs::ListFiles)
+KMDB::Resque.enqueue(KMDB::Jobs::FindFiles)
 

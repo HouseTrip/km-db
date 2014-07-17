@@ -1,6 +1,6 @@
 require 'kmdb'
 require 'kmdb/models/dumpfile'
-require 'kmdb/downloader'
+require 'kmdb/models/s3_object'
 
 module KMDB
   # Models one of KissMetrics's JSON dumps.
@@ -20,26 +20,28 @@ module KMDB
       end
     end
 
+    def exist?
+      _cached_path.exist? || _s3object.exist?
+    end
+
     def metadata
       @metadata ||= Dumpfile.get(revision)
     end
 
-    module ClassMethods
-      # Looks in the S3 bucket and create Dumpfile records
-      # for any missing file.
-      def update_list
-        raise
-      end
-    end
-    extend ClassMethods
-
     private
 
     def _cached
-      path = Pathname.new("tmp/#{revision}.json")
-      return path if path.exist?
-      Downloader.new(revision, path).run
-      path
+      return _cached_path if _cached_path.exist?
+      _s3object.download(_cached_path)
+      _cached_path
+    end
+
+    def _cached_path
+      @_cached_path ||= Pathname.new("tmp/#{revision}.json")
+    end
+
+    def _s3object
+      @_s3object ||= S3Object.new("revisions/#{revision}.json")
     end
   end
 end
