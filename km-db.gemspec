@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'resque-lock'
   s.add_dependency 'foreman'
   s.add_dependency 'fog'
+  s.add_dependency 'mysql2'
 
   s.files        = `git ls-files`.split("\n")
   s.test_files   = `git ls-files -- {test,spec,features}/*`.split("\n")
