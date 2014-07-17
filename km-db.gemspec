@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'activerecord', '~> 4.1'
   s.add_dependency 'resque'
   s.add_dependency 'resque-lock'
+  s.add_dependency 'foreman'
   s.add_dependency 'fog'
 
   s.files        = `git ls-files`.split("\n")
