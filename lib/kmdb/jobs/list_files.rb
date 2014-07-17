@@ -1,13 +1,14 @@
 require 'kmdb'
 require 'kmdb/resque'
 require 'pathname'
+require 'kmdb/jobs/locked'
 require 'kmdb/jobs/parse_file'
 require 'kmdb/models/dumpfile'
 
 module KMDB
   module Jobs
     # Lists known dump files, queues parse jobs for each
-    class ListFiles
+    class ListFiles < Locked
       @queue = :low
 
       def self.perform

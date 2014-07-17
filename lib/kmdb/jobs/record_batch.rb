@@ -7,11 +7,12 @@ require 'kmdb/models/event'
 require 'kmdb/models/property'
 require 'kmdb/models/global_uid'
 require 'kmdb/models/ignored_user'
+require 'kmdb/jobs/locked'
 require 'kmdb/jobs/unalias_user'
 
 module KMDB
   module Jobs
-    class RecordBatch
+    class RecordBatch < Locked
       @queue = :high
 
       def self.perform(id)

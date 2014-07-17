@@ -2,11 +2,12 @@ require 'kmdb'
 require 'kmdb/models/user'
 require 'kmdb/models/event'
 require 'kmdb/models/property'
+require 'kmdb/jobs/locked'
 
 module KMDB
   module Jobs
     # Removes all references to a user alias
-    class UnaliasUser
+    class UnaliasUser < Locked
       @queue = :medium
 
       def self.perform(name1, name2)

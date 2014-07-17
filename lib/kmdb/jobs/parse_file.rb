@@ -2,6 +2,7 @@ require 'kmdb'
 require 'pathname'
 require 'kmdb/models/dumpfile'
 require 'kmdb/models/event_batch'
+require 'kmdb/jobs/locked'
 require 'kmdb/jobs/record_batch'
 require 'kmdb/resque'
 require 'oj'
@@ -10,7 +11,7 @@ module KMDB
   module Jobs
     # Reads a file from disk, 
     # queues jobs for chunks of events.
-    class ParseFile
+    class ParseFile < Locked
       @queue = :low
 
       def self.perform(id)
