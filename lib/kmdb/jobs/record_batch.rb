@@ -7,6 +7,7 @@ require 'kmdb/models/event'
 require 'kmdb/models/property'
 require 'kmdb/models/global_uid'
 require 'kmdb/models/ignored_user'
+require 'kmdb/models/whitelisted_event'
 require 'kmdb/jobs/locked'
 require 'kmdb/jobs/unalias_user'
 
@@ -28,12 +29,17 @@ module KMDB
         tid = GlobalUID.get
 
         @batch.events.each do |event|
+          # reject non-whitelisted events
+          next unless event['_n'].nil? || WhitelistedEvent.include?(event['_n'])
+
           # reject ignored users 
           next if IgnoredUser.include?(event['_p']) ||
                   IgnoredUser.include?(event['_p2'])
 
           # store depending on event type
           if event['_p2']
+            # ignore aliasing between "real" users
+            next if event['_p'] =~ /^\d+$/ && event['_p2'] =~ /^\d+$/
             aliaz = Alias.record event['_p'], event['_p2'], event['_t']
             Resque.enqueue(UnaliasUser, aliaz.name1, aliaz.name2)
           elsif event['_n']
