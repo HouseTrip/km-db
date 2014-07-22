@@ -26,7 +26,9 @@ module KMDB
     end
 
     def transaction(&block)
-      ActiveRecord::Base.transaction(&block)
+      ActiveRecord::Base.transaction do
+        yield ActiveRecord::Base.connection
+      end
     end
   end
   extend ModuleMethods
