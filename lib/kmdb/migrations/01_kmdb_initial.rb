@@ -33,7 +33,6 @@ class KmdbInitial < ActiveRecord::Migration
     add_index :properties, [:key],      using: :hash
     add_index :properties, [:user_id],  using: :hash
     add_index :properties, [:event_id], using: :hash
-    add_index :properties, [:t, :id],   unique: true # for partitioning purposes
 
     create_table :users do |t|
       t.string  :name, limit: 48
