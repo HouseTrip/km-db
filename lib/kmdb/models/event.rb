@@ -27,7 +27,7 @@ module KMDB
 
     def self.record(hash, tid: nil)
       user_name = hash.delete('_p')
-      user ||= User.get(user_name)
+      user = User.find_or_create(name: user_name)
       raise UserError.new "User missing for '#{user_name}'" unless user.present?
 
       stamp = Time.at hash.delete('_t')

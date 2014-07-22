@@ -18,10 +18,5 @@ module KMDB
     def prop(name)
       properties.named(name).first.andand.value
     end
-
-    # syntax sugar
-    def self.get(name)
-      find_or_create(name: name)
-    end
   end
 end

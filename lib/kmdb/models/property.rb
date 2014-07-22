@@ -14,7 +14,7 @@ module KMDB
 
     def self.set(hash, stamp: nil, user: nil, event: nil, tid: nil)
       user_name = hash.delete('_p')
-      user ||= User.get(user_name)
+      user ||= User.find_or_create(name: user_name)
       raise UserError.new "User missing for '#{user_name}'" unless user.present?
 
       event_id = event ? event.id : nil
