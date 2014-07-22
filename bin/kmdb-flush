@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require 'kmdb'
+require 'kmdb/redis'
+
+KMDB.connect.migrate
+
+KMDB.transaction do |c|
+  %w(aliases dumpfiles events properties users).each do |table|
+   c.execute "TRUNCATE TABLE #{table}"
+  end
+end
+
+KMDB::Redis.connection.flushdb
