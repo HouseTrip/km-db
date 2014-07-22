@@ -26,7 +26,8 @@ module KMDB
       end
 
       def work
-        tid = GlobalUID.get
+        event_sql = []
+        properties_sql = []
 
         @batch.events.each do |event|
           # reject non-whitelisted events
@@ -43,15 +44,18 @@ module KMDB
             aliaz = Alias.record event['_p'], event['_p2'], event['_t']
             Resque.enqueue(UnaliasUser, aliaz.name1, aliaz.name2)
           elsif event['_n']
-            Event.record(event, tid: tid)
+            Event.sql_for(event) do |e,p|
+              event_sql << e
+              properties_sql << p
+            end
           else
-            Property.set(event, tid: tid)
+            properties_sql << Property.sql_for(event) 
           end
         end
 
-        KMDB.transaction do
-          Event.commit(tid)
-          Property.commit(tid)
+        KMDB.transaction do |c|
+          Event.mass_create(event_sql)
+          Property.mass_create(properties_sql)
         end
 
         @batch.delete

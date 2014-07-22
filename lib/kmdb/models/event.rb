@@ -1,6 +1,7 @@
 require 'kmdb/models/custom_record'
 require 'kmdb/concerns/belongs_to_user'
 require 'kmdb/concerns/has_properties'
+require 'kmdb/models/global_uid'
 require 'kmdb/user_error'
 
 module KMDB
@@ -25,16 +26,24 @@ module KMDB
       KMDB::Key.find(n).value
     end
 
-    def self.record(hash, tid: nil)
+    def self.sql_for(hash)
       user_name = hash.delete('_p')
       user = User.find_or_create(name: user_name)
       raise UserError.new "User missing for '#{user_name}'" unless user.present?
 
       stamp = Time.at hash.delete('_t')
       key = Key.get hash.delete('_n')
-      event = create(t: stamp, n: key, user: user, tid: tid)
-      Property.set(hash, stamp: stamp, user: user, event: event, tid: tid)
-      event
+
+      event_id = GlobalUID.get(:event)
+      event_sql = sanitize_sql_array(["(?,?,?,?)", event_id, stamp, key, user.id])
+      properties_sql = Property.sql_for(hash, stamp: stamp, user: user, event_id: event_id)
+      
+      yield event_sql, properties_sql
+    end
+
+    def self.mass_create(values_strings)
+      sql_insert = "INSERT INTO `#{table_name}` (`id`, `t`, `n`, `user_id`) VALUES\n"
+      connection.execute(sql_insert + values_strings.join(",\n"))
     end
   end
 end

@@ -13,11 +13,9 @@ class KmdbInitial < ActiveRecord::Migration
       t.integer  :user_id
       t.integer  :n
       t.datetime :t
-      t.integer  :tid
     end
     add_index :events, [:n],          using: :hash
     add_index :events, [:user_id],    using: :hash
-    add_index :events, [:tid],        using: :hash
 
 
     create_table :keys do |t|
@@ -30,14 +28,12 @@ class KmdbInitial < ActiveRecord::Migration
       t.integer  :event_id
       t.integer  :key
       t.datetime :t
-      t.integer  :tid # transaction ID
       t.string   :value
     end
     add_index :properties, [:key],      using: :hash
     add_index :properties, [:user_id],  using: :hash
     add_index :properties, [:event_id], using: :hash
     add_index :properties, [:t, :id],   unique: true # for partitioning purposes
-    add_index :properties, [:tid]
 
     create_table :users do |t|
       t.string  :name, limit: 48
