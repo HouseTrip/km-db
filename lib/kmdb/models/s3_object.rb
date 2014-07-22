@@ -1,4 +1,5 @@
-require 'fog'
+require 'kmdb'
+require 'kmdb/s3_bucket'
 require 'tempfile'
 
 module KMDB
@@ -26,7 +27,7 @@ module KMDB
     def _file
       @_file ||= begin
         _log "checking for existence"
-        _directory.files.head(@path)
+        S3Bucket.instance.files.head(@path)
       end
     end
 
@@ -43,18 +44,6 @@ module KMDB
 
     def _tempdir
       Pathname.new('tmp/').mk
-    end
-
-    def _directory
-      @_directory ||= _connection.directories.get(ENV.fetch('AWS_BUCKET'))
-    end
-    
-    def _connection
-      @_connection ||= Fog::Storage.new(
-        provider:              'AWS',
-        aws_access_key_id:     ENV.fetch('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
-      )
     end
 
     def _log(message)
