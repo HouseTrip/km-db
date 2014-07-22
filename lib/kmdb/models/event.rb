@@ -42,6 +42,7 @@ module KMDB
     end
 
     def self.mass_create(values_strings)
+      return if values_strings.empty?
       sql_insert = "INSERT INTO `#{table_name}` (`id`, `t`, `n`, `user_id`) VALUES\n"
       connection.execute(sql_insert + values_strings.join(",\n"))
     end
