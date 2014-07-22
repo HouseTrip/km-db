@@ -19,11 +19,8 @@ module KMDB
         lookahead = Integer(ENV.fetch('KMDB_REVISION_LOOKAHEAD', 10))
         start_at = Dumpfile.maximum(:revision) || Integer(ENV.fetch('KMDB_MIN_REVISION', 1))
 
-        json_files = start_at.upto(start_at + lookahead).map do |revision|
-          JsonFile.new(revision)
-        end
-
-        json_files.each do |json_file|
+        start_at.upto(start_at + lookahead).map do |revision|
+          json_file = JsonFile.new(revision)
           next unless json_file.exist?
           Resque.enqueue(ParseFile, json_file.revision)
         end
