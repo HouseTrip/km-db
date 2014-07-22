@@ -12,8 +12,9 @@ module KMDB
       def work
         _configure
         ::Resque::Worker.new(:high, :medium, :low).tap do |w|
-          w.term_timeout = 8
-          w.term_child   = true
+          w.term_timeout   = 8
+          w.term_child     = true
+          w.cant_fork      = true
           w.log "starting worker"
           w.work(5) # interval
         end
