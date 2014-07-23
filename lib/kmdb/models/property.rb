@@ -23,7 +23,7 @@ module KMDB
 
       hash.each_pair do |prop_name,value|
         key = Key.get(prop_name)
-        value = value[0...255]
+        value = value[0...255].scrub
         sql_values << sanitize_sql_array(['(?,?,?,?,?)', stamp,user.id,event_id,key,value])
       end
 

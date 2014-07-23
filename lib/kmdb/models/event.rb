@@ -32,7 +32,7 @@ module KMDB
       raise UserError.new "User missing for '#{user_name}'" unless user.present?
 
       stamp = Time.at hash.delete('_t')
-      key = Key.get hash.delete('_n')
+      key = Key.get hash.delete('_n').scrub
 
       event_id = GlobalUID.get(:event)
       event_sql = sanitize_sql_array(["(?,?,?,?)", event_id, stamp, key, user.id])
