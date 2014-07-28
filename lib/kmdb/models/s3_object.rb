@@ -47,7 +47,7 @@ module KMDB
     end
 
     def _log(message)
-      STDOUT.write("s3 #{@path}: #{message}\n")
+      $stderr.write("s3 #{@path}: #{message}\n")
     end
   end
 end
