@@ -54,8 +54,8 @@ module KMDB
         end
 
         KMDB.transaction do |c|
-          Event.mass_create(event_sql)
-          Property.mass_create(properties_sql)
+          Event.mass_create(event_sql.compact)
+          Property.mass_create(properties_sql.compact)
         end
 
         @batch.delete
