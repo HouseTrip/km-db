@@ -4,8 +4,9 @@ require 'kmdb/redis'
 module KMDB
   module GlobalUID
     module ModuleMethods
+
       def get(ns = 'value')
-        _redis.incr(ns) % (1 << 31)
+        _redis.incr(ns) % (1 << 48)
       end
 
       private
