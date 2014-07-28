@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+require 'kmdb'
+require 'kmdb/models/event'
+require 'kmdb/models/alias'
+require 'kmdb/models/property'
+require 'kmdb/services/partitioner'
+
+KMDB.connect.migrate
+
+module KMDB
+  [Event, Property, Alias].each do |model|
+    Services::Partitioner.new(model: model).run
+  end
+end
+

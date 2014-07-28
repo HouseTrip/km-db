@@ -52,7 +52,9 @@ class KmdbInitial < ActiveRecord::Migration
       t.string   :name2, limit: 48
       t.datetime :t
     end
-    add_index :aliases, [:name1, :name2], unique: true
+    # add_index :aliases, [:name1, :name2], using: :hash, unique: true
+    add_index :aliases, [:name1], using: :hash
+    add_index :aliases, [:name2], using: :hash
 
     create_table :dumpfiles do |t|
       t.integer :revision
