@@ -15,7 +15,10 @@ Beware though, KM data can be huge, and processing it is taxing!
 
 ## Installing
 
-Add this to your Gemfile if you're using Bundler:
+If you want to run "just" KM-DB, you might want to just use [the
+app](https://github.com/HouseTrip/km-db-app).
+
+Otherwise, add this to your Gemfile if you're using Bundler:
 
     gem 'km-db'
 
