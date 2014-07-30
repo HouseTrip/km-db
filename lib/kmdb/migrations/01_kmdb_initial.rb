@@ -16,6 +16,7 @@ class KmdbInitial < ActiveRecord::Migration
     end
     add_index :events, [:n],          using: :hash
     add_index :events, [:user_id],    using: :hash
+    add_index :events, [:user_id, :n, :t]
 
 
     create_table :keys do |t|
@@ -33,6 +34,7 @@ class KmdbInitial < ActiveRecord::Migration
     add_index :properties, [:key],      using: :hash
     add_index :properties, [:user_id],  using: :hash
     add_index :properties, [:event_id], using: :hash
+    add_index :properties, [:user_id, :key, :t]
 
     create_table :users do |t|
       t.string  :name, limit: 48
