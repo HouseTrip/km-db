@@ -9,6 +9,8 @@ require 'kmdb'
 class KmdbInitial < ActiveRecord::Migration
 
   def up
+    execute "SET character_set_database = 'utf8'"
+
     create_table :events do |t|
       t.integer  :user_id
       t.integer  :n
