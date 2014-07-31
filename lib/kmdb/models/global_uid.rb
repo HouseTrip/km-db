@@ -4,6 +4,8 @@ require 'kmdb/redis'
 module KMDB
   # Efficiently generate cross-process globally unique IDs
   # pernamespace, using Redis.
+  # IDs start at 1 and increment monotonically; each client is handed Ids in
+  # batches of 100.
   class GlobalUID
 
     def self.get(ns = 'value')
@@ -19,12 +21,12 @@ module KMDB
     end
 
     def get
-      if @major.nil? || @minor >= BATCH_SIZE
+      if @major.nil? || @minor > BATCH_SIZE
         @major = _redis.incr(@ns) % (1 << 48)
-        @minor = 0
+        @minor = 1
       end
 
-      uid = (@major - 1) * BATCH_SIZE + @minor
+      uid = (@major-1) * BATCH_SIZE + @minor
       @minor += 1
       return uid
     end
