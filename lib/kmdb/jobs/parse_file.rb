@@ -73,6 +73,7 @@ module KMDB
       # text line in, event hash out
       def _parse_event(text)
         return if text.nil?
+        text = text.force_encoding('UTF-8').scrub
 
         # filter strange utf-8 encoding/escaping found in KM dumps   
         if text =~ /(\\[0-9]{3})+/
