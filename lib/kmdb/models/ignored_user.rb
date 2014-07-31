@@ -1,13 +1,20 @@
 require 'kmdb'
-require 'kmdb/concerns/table_regexp'
 require 'active_record'
+require 'set'
 
 module KMDB
   class IgnoredUser < ActiveRecord::Base
-    extend TableRegexp
+    module ClassMethods
+      def include?(name)
+        _data.include?(name)
+      end
 
-    def self.include?(name)
-      !! (regexp == :empty ? false : regexp.match(name))
+      private
+
+      def _data
+        @_data ||= Set.new(pluck(:name))
+      end
     end
+    extend ClassMethods
   end
 end
