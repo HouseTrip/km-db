@@ -7,8 +7,6 @@ module KMDB
     include CustomRecord
     include HasProperties
 
-    self.primary_key = 'id'
-
     has_many :events,     class_name: 'KMDB::Event', inverse_of: :user
       # points to the aliased user. if set, no properties/events should belong to this user
 
