@@ -18,6 +18,7 @@ module KMDB
         metadata.update_attributes!(length: io.size)
         yield io
       end
+      _flush_cache if _should_flush?
     end
 
     def exist?
@@ -29,6 +30,14 @@ module KMDB
     end
 
     private
+
+    def _should_flush?
+      !! (ENV.fetch('KMDB_KEEP_FILES', 'YES') !~ /YES/)
+    end
+
+    def _flush_cache
+      _cached_path.delete if _cached_path.exist?
+    end
 
     def _cached
       return _cached_path if _cached_path.exist?
