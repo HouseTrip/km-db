@@ -7,11 +7,16 @@ module KMDB
     include CustomRecord
     include HasProperties
 
+    self.primary_key = 'id'
+
     has_many :events,     class_name: 'KMDB::Event', inverse_of: :user
       # points to the aliased user. if set, no properties/events should belong to this user
 
     validates_presence_of   :name
-    validates_uniqueness_of :name
+    
+    # it's bad practice, but this is (much) more efficiently done
+    # by the SQL engine:
+    # validates_uniqueness_of :name
 
     scope :named, lambda { |name| where(name: name) }
 
