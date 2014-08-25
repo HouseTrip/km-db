@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+=begin
+    
+  Import KM events from the raw dumps.
+
+=end
+require 'kmdb'
+require 'kmdb/resque'
+require 'kmdb/jobs/redo_unaliasing'
+
+KMDB::Resque.enqueue(KMDB::Jobs::RedoUnaliasing, Date.today.to_s)
+
