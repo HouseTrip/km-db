@@ -15,11 +15,12 @@ module KMDB
       end
 
       def initialize(name1, name2)
-        @user  = User.find_or_create(name: name1)
-        @alias = User.find_or_create(name: name2)
+        @user  = User.where(name: name1).first
+        @alias = User.where(name: name2).first
       end
       
       def work
+        return unless @user && @alias
         [Property, Event].each do |model|
           model.where(user_id: @alias.id).update_all(user_id: @user.id)
         end
