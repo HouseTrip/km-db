@@ -6,6 +6,8 @@ require 'kmdb/user_error'
 
 module KMDB
   class Event < ActiveRecord::Base
+    self.primary_key = :id
+
     include CustomRecord
     include BelongsToUser
     include HasProperties

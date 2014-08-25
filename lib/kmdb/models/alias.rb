@@ -3,6 +3,8 @@ require 'kmdb/models/custom_record'
 module KMDB
   # Aliasing events, ie. pairs of user names that are considered the same actual user.
   class Alias < ActiveRecord::Base
+    self.primary_key = :id
+
     module ClassMethods
       def record(name1, name2, stamp)
         retries ||= 5

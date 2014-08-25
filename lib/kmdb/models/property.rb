@@ -4,6 +4,8 @@ require 'kmdb/user_error'
 
 module KMDB
   class Property < ActiveRecord::Base
+    self.primary_key = :id
+
     include CustomRecord
     include BelongsToUser
 
