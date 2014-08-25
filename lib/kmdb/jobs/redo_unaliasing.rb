@@ -10,7 +10,7 @@ module KMDB
     # Processes recent unalias user events, again
     # This copes with parallelism in the import process
     class RedoUnaliasing < Locked
-      @queue = :medium
+      @queue = :low
 
       def self.perform(date)
         new(date).work
