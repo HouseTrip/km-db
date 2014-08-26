@@ -21,7 +21,7 @@ module KMDB
       def _sorted(name1, name2)
         if name1 =~ /^[0-9]+$/
           [name1, name2]
-        elsif name2 =~ /^[0-9+]$/
+        elsif name2 =~ /^[0-9]+$/
           [name2, name1]
         elsif name2 < name1
           [name2, name1]
