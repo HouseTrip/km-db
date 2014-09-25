@@ -1,5 +1,6 @@
 require 'kmdb/models/custom_record'
 require 'kmdb/concerns/belongs_to_user'
+require 'kmdb/concerns/blacklisted_property'
 require 'kmdb/user_error'
 
 module KMDB
@@ -24,11 +25,13 @@ module KMDB
       sql_values = []
 
       hash.each_pair do |prop_name,value|
+        next if BlacklistedProperty.include?(prop_name)
         key = Key.get(prop_name)
         value = value[0...255].scrub
         sql_values << sanitize_sql_array(['(?,?,?,?,?)', stamp,user.id,event_id,key,value])
       end
 
+      return if sql_values.empty?
       sql_values.join(",\n")
     end
 
