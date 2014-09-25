@@ -21,11 +21,15 @@ module KMDB
 
     # return value of property
     def prop(name)
-      properties.named(name).first.andand.value
+      if p = properties.named(name).first
+        p.value
+      else
+        nil
+      end
     end
 
     def name
-      KMDB::Key.find(n).value
+      KMDB::Key.find(n).string
     end
 
     def self.sql_for(hash)
