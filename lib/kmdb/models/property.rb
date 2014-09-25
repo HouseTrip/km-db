@@ -1,6 +1,6 @@
 require 'kmdb/models/custom_record'
 require 'kmdb/concerns/belongs_to_user'
-require 'kmdb/concerns/blacklisted_property'
+require 'kmdb/models/blacklisted_property'
 require 'kmdb/user_error'
 
 module KMDB
