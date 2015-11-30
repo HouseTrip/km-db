@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 2.4.0'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'pry'
-  
+
   s.add_dependency 'oj'
   s.add_dependency 'progressbar'
   s.add_dependency 'andand'
@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'resque'
   s.add_dependency 'resque-lock'
   s.add_dependency 'foreman'
+  s.add_dependency 'mime-types'
   s.add_dependency 'fog'
   s.add_dependency 'mysql2'
 
